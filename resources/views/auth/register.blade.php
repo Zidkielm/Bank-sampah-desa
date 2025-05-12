@@ -10,8 +10,13 @@
             </div>
 
             <div>
-                <x-label for="email">{{ __('Email Address') }} <span class="text-red-500">*</span></x-label>
-                <x-input id="email" type="email" name="email" :value="old('email')" required />
+                <x-label for="username">{{ __('Username') }} <span class="text-red-500">*</span></x-label>
+                <x-input id="username" type="text" name="username" :value="old('username')" required />
+            </div>
+
+            <div>
+                <x-label for="email">{{ __('Email Address') }}</x-label>
+                <x-input id="email" type="email" name="email" :value="old('email')" />
             </div>
 
             <div>
@@ -33,7 +38,7 @@
             </div>
             <x-button>
                 {{ __('Sign Up') }}
-            </x-button>                
+            </x-button>
         </div>
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                 <div class="mt-6">
@@ -43,13 +48,13 @@
                             {!! __('I agree to the :terms_of_service and :privacy_policy', [
                                 'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="text-sm underline hover:no-underline">'.__('Terms of Service').'</a>',
                                 'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="text-sm underline hover:no-underline">'.__('Privacy Policy').'</a>',
-                            ]) !!}                        
+                            ]) !!}
                         </span>
                     </label>
                 </div>
-            @endif        
+            @endif
     </form>
-    <x-validation-errors class="mt-4" />  
+    <x-validation-errors class="mt-4" />
     <!-- Footer -->
     <div class="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
         <div class="text-sm">
