@@ -1,6 +1,6 @@
 <x-landing-layout>
     <!-- Header/Navigation -->
-    <header class="bg-white py-4 px-6 md:px-12 shadow-sm">
+    <header class="bg-white py-4 px-6 md:px-12 shadow-sm" x-data="{ mobileMenuOpen: false }">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center">
@@ -22,16 +22,23 @@
             </nav>
 
             <!-- Auth Buttons -->
-            <div class="flex items-center space-x-3">
-                <a href="#" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition">Masuk</a>
-                <a href="#" class="border border-green-500 text-green-500 hover:bg-green-500 hover:text-white px-4 py-2 rounded-md transition">Daftar</a>
+            <div class="hidden md:flex items-center space-x-3">
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition">Masuk</a>
+                    <a href="{{ route('register') }}" class="border border-green-500 text-green-500 hover:bg-green-500 hover:text-white px-4 py-2 rounded-md transition">Daftar</a>
+                @endauth
             </div>
 
             <!-- Mobile Menu Button (hidden on desktop) -->
-            <button class="md:hidden text-gray-800">
+            <button @click="mobileMenuOpen = true" class="md:hidden text-gray-800">
                 <i data-feather="menu"></i>
             </button>
         </div>
+
+        <!-- Mobile Menu -->
+        <x-mobile-menu />
     </header>
 
     <!-- Hero Section -->
@@ -60,7 +67,7 @@
     <x-button class="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white rounded-full p-3 shadow-lg">
         <i data-feather="phone" class="text-white"></i>
     </x-button>
-    
+
     <!-- About Section -->
     <section id="tentang-kami" class="py-16 px-6 md:px-12 bg-gray-50">
         <div class="container mx-auto">
