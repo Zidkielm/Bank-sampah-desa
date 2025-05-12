@@ -19,7 +19,12 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email' => ['nullable', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'no_hp' => ['nullable', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'alamat' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', 'string', 'in:active,inactive'],
+            'role' => ['nullable', 'string', 'in:admin,petugas,nasabah'],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
 
@@ -27,13 +32,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->updateProfilePhoto($input['photo']);
         }
 
-        if ($input['email'] !== $user->email &&
+        if (isset($input['email']) && $input['email'] !== $user->email &&
             $user instanceof MustVerifyEmail) {
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
                 'name' => $input['name'],
-                'email' => $input['email'],
+                'email' => $input['email'] ?? $user->email,
+                'username' => $input['username'],
+                'no_hp' => $input['no_hp'] ?? null,
+                'alamat' => $input['alamat'] ?? null,
+                'status' => $input['status'] ?? $user->status,
+                'role' => $input['role'] ?? $user->role,
             ])->save();
         }
     }
@@ -48,6 +58,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         $user->forceFill([
             'name' => $input['name'],
             'email' => $input['email'],
+            'username' => $input['username'],
+            'no_hp' => $input['no_hp'] ?? null,
+            'alamat' => $input['alamat'] ?? null,
+            'status' => $input['status'] ?? $user->status,
+            'role' => $input['role'] ?? $user->role,
             'email_verified_at' => null,
         ])->save();
 
