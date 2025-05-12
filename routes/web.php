@@ -27,6 +27,10 @@ use App\Http\Controllers\PetugasController;
 
 Route::redirect('/', 'login');
 
+Route::get('/landing', function () {
+    return view('pages.landing.index');
+})->name('landing');
+
 // role admin
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function () {
 
