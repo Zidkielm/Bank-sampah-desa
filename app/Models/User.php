@@ -28,6 +28,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'username',
+        'no_hp',
+        'alamat',
+        'status',
     ];
 
     /**
@@ -59,4 +63,44 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class);
+    }
+
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    public function monthlyFees()
+    {
+        return $this->hasMany(MonthlyFee::class);
+    }
+
+    public function balance()
+    {
+        return $this->hasOne(Balance::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function receivedDeposits()
+    {
+        return $this->hasMany(Deposit::class, 'receiver_id');
+    }
+
+    public function processedWithdrawals()
+    {
+        return $this->hasMany(Withdrawal::class, 'processed_by');
+    }
+
+    public function receivedMonthlyFees()
+    {
+        return $this->hasMany(MonthlyFee::class, 'receiver_id');
+    }
 }
