@@ -167,14 +167,36 @@
                             </a>
                         </li>
 
-                        {{-- riwayat --}}
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('nasabah.riwayat')){{ 'from-orange-500/[0.12] dark:from-orange-500/[0.24] to-orange-500/[0.04]' }}@endif">
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('nasabah.riwayat')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('nasabah.riwayat') }}">
-                                <div class="flex items-center">
-                                    <i data-feather="file-text" class="shrink-0 @if(request()->routeIs('nasabah.riwayat')){{ 'text-orange-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16"></i>
-                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Riwayat</span>
+                        {{-- Riwayat dropdown --}}
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('nasabah.riwayat.*')){{ 'from-orange-500/[0.12] dark:from-orange-500/[0.24] to-orange-500/[0.04]' }}@endif" x-data="{ open: {{ request()->routeIs('nasabah.riwayat.*') ? 1 : 0 }} }">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('nasabah.riwayat.*')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i data-feather="file-text" class="shrink-0 @if(request()->routeIs('nasabah.riwayat.*')){{ 'text-orange-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16"></i>
+                                        <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Riwayat</span>
+                                    </div>
+                                    <!-- Icon -->
+                                    <div class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500 @if(request()->routeIs('nasabah.riwayat.*')){{ 'rotate-180' }}@endif" :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
+                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </a>
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                                <ul class="pl-8 mt-1 @if(!request()->routeIs('nasabah.riwayat.*')){{ 'hidden' }}@endif" :class="open ? 'block!' : 'hidden'">
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if(Route::is('nasabah.riwayat.pengambilan')){{ 'text-orange-500!' }}@endif" href="{{ route('nasabah.riwayat.pengambilan') }}">
+                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pengambilan</span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if(Route::is('nasabah.riwayat.pembelian')){{ 'text-orange-500!' }}@endif" href="{{ route('nasabah.riwayat.pembelian') }}">
+                                            <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pembelian</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     @endif
                 </ul>
