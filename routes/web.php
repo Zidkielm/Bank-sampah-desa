@@ -37,6 +37,11 @@ Route::get('/landing', function () {
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/tarik-saldo', [AdminController::class, 'tarikSaldo'])->name('tarik-saldo');
+    Route::post('/dashboard/tarik-saldo', [AdminController::class, 'storeWithdrawal'])->name('withdrawal.store');
+    Route::get('/dashboard/tarik-saldo/{id}', [AdminController::class, 'showWithdrawal'])->name('withdrawal.show');
+    Route::get('/dashboard/user-balance/{id}', [AdminController::class, 'getUserBalance'])->name('user-balance');
+    Route::post('/dashboard/tarik-saldo/report', [AdminController::class, 'withdrawalReport'])->name('withdrawal.report');
+
     Route::get('/dashboard/iuran', [AdminController::class, 'iuran'])->name('iuran');
 
     Route::get('/dashboard/setoran', [DepositController::class, 'index'])->name('setoran');
