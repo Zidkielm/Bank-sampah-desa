@@ -43,4 +43,42 @@ class Deposit extends Model
     {
         return $this->morphOne(Transaction::class, 'transactionable');
     }
+
+    public static function getTotalDeposits($userId = null, $startDate = null, $endDate = null)
+    {
+        $query = self::query();
+
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('deposit_date', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $query->where('deposit_date', '>=', $startDate);
+        } elseif ($endDate) {
+            $query->where('deposit_date', '<=', $endDate);
+        }
+
+        return $query->sum('total_amount');
+    }
+
+    public static function getTotalWeight($userId = null, $startDate = null, $endDate = null)
+    {
+        $query = self::query();
+
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('deposit_date', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $query->where('deposit_date', '>=', $startDate);
+        } elseif ($endDate) {
+            $query->where('deposit_date', '<=', $endDate);
+        }
+
+        return $query->sum('weight_kg');
+    }
 }
