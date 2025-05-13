@@ -35,20 +35,20 @@
                         @forelse($unpaidUsers as $index => $user)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 {{ in_array($user, $deactivated) ? 'bg-red-50 dark:bg-red-900/10' : '' }}">
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $index + 1 }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $user->name }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $user->no_hp ?? '-' }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $user->unpaid_months }}</td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $user['name'] }}</td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $user['no_hp'] ?? '-' }}</td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $user['unpaid_months'] }}</td>
                                 <td class="px-4 py-4">
-                                    @if($user->status === 'active')
+                                    @if($user['status'] === 'active')
                                         <span class="px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">Active</span>
                                     @else
                                         <span class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">Inactive</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-4">
-                                    <button class="text-orange-500 hover:underline" @click="showAddModal = true; selectedUserId = {{ $user->id }}">
+                                    <a href="{{ route('monthly-fee.store') }}?user_id={{ $user['id'] }}" class="text-orange-500 hover:underline">
                                         Tambah Pembayaran
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         @empty
@@ -68,7 +68,7 @@
 
                 <ul class="list-disc pl-5 text-red-700 dark:text-red-400 space-y-1">
                     @foreach($deactivated as $user)
-                        <li>{{ $user->name }} ({{ $user->unpaid_months }} bulan)</li>
+                        <li>{{ $user['name'] }} ({{ $user['unpaid_months'] }} bulan)</li>
                     @endforeach
                 </ul>
             </div>

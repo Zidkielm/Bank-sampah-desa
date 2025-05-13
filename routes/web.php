@@ -32,8 +32,8 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
 
     Route::get('/dashboard/iuran', [MonthlyFeeController::class, 'index'])->name('iuran');
     Route::post('/dashboard/iuran', [MonthlyFeeController::class, 'store'])->name('monthly-fee.store');
-    Route::get('/dashboard/iuran/{id}', [MonthlyFeeController::class, 'show'])->name('monthly-fee.show');
     Route::get('/dashboard/iuran/check-unpaid', [MonthlyFeeController::class, 'checkUnpaidUsers'])->name('monthly-fee.check-unpaid');
+    Route::get('/dashboard/iuran/{id}', [MonthlyFeeController::class, 'show'])->name('monthly-fee.show');
 
     Route::get('/dashboard/tarik-saldo', [WithdrawalController::class, 'index'])->name('tarik-saldo');
     Route::post('/dashboard/tarik-saldo', [WithdrawalController::class, 'store'])->name('withdrawal.store');

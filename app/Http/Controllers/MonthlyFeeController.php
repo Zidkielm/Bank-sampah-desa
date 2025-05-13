@@ -67,7 +67,6 @@ class MonthlyFeeController extends Controller
                     $balance->amount = $newBalance;
                     $balance->save();
 
-                    // Create transaction record
                     Transaction::create([
                         'user_id' => $request->user_id,
                         'transactionable_id' => $monthlyFee->id,
@@ -114,7 +113,6 @@ class MonthlyFeeController extends Controller
         $deactivated = [];
 
         foreach ($users as $user) {
-            // Check if user has paid for the current month
             $hasPaid = MonthlyFee::where('user_id', $user->id)
                         ->whereYear('payment_date', $now->year)
                         ->whereMonth('payment_date', $now->month)
@@ -123,14 +121,22 @@ class MonthlyFeeController extends Controller
 
             if (!$hasPaid) {
                 $unpaidMonths = $this->countUnpaidMonths($user->id);
-                $user->unpaid_months = $unpaidMonths;
-                $unpaidUsers[] = $user;
+
+                $unpaidUser = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'no_hp' => $user->no_hp,
+                    'status' => $user->status,
+                    'unpaid_months' => $unpaidMonths
+                ];
+
+                $unpaidUsers[] = $unpaidUser;
 
                 // If unpaid for more than 2 months, deactivate the account
                 if ($unpaidMonths > 2) {
                     $user->status = 'inactive';
                     $user->save();
-                    $deactivated[] = $user;
+                    $deactivated[] = $unpaidUser;
                 }
             }
         }
