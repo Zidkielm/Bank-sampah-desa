@@ -16,7 +16,8 @@
     }">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Data petugas</h1>
-            <button @click="showModal = true" class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+            <button @click="showModal = true"
+                class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                 Tambah Data Petugas
             </button>
         </div>
@@ -27,7 +28,9 @@
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
                     </div>
-                    <input type="text" class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full pl-10 p-2.5 w-full md:w-80" placeholder="Masukkan nama">
+                    <input type="text"
+                        class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full pl-10 p-2.5 w-full md:w-80"
+                        placeholder="Masukkan nama">
                 </div>
             </div>
 

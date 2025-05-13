@@ -68,7 +68,8 @@
                 <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5">
                     <div class="flex items-center">
                         <div class="ml-5 mr-auto">
-                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Transaksi Setoran</h2>
+                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Transaksi Setoran
+                            </h2>
                             <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">500</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-red-500 rounded-2xl">

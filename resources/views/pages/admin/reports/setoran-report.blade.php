@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,68 +12,86 @@
             padding: 20px;
             color: #333;
         }
+
         h1 {
             text-align: center;
             margin-bottom: 10px;
         }
+
         .report-header {
             text-align: center;
             margin-bottom: 30px;
         }
+
         .report-info {
             margin-bottom: 20px;
         }
+
         .report-info p {
             margin: 5px 0;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
+
         thead {
             background-color: #f3f4f6;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px 10px;
             text-align: left;
         }
+
         th {
             font-weight: bold;
         }
+
         .text-right {
             text-align: right;
         }
+
         .summary {
             margin-top: 20px;
             margin-bottom: 40px;
         }
+
         .signature-section {
             margin-top: 50px;
             display: flex;
             justify-content: space-between;
         }
+
         .signature-box {
             width: 45%;
         }
+
         .signature-line {
             margin-top: 80px;
             border-top: 1px solid #000;
         }
+
         @media print {
             body {
                 padding: 0;
                 margin: 10mm;
             }
+
             button {
                 display: none;
             }
         }
     </style>
 </head>
+
 <body>
-    <button onclick="window.print()" style="padding: 8px 16px; background: #ea580c; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 20px;">
+    <button onclick="window.print()"
+        style="padding: 8px 16px; background: #ea580c; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 20px;">
         Print Laporan
     </button>
 
@@ -143,4 +162,5 @@
         </div>
     </div>
 </body>
+
 </html>

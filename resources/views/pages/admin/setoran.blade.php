@@ -115,10 +115,10 @@
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->user->name }}</td>
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->wasteType->name }}
                                 </td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ number_format($deposit->weight_kg, 2) }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ 'Rp ' . number_format($deposit->total_amount, 0, ',', '.') }}</td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->formatted_weight }}
+                                </td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->formatted_total }}
+                                </td>
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->receiver->name }}
                                 </td>
                                 <td class="px-4 py-4">
