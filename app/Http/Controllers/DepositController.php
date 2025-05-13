@@ -155,4 +155,27 @@ class DepositController extends Controller
             'deposits', 'startDate', 'endDate', 'totalWeight', 'totalAmount'
         ));
     }
+
+    public function petugasGenerateReport(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $deposits = Deposit::with(['user', 'wasteType', 'receiver'])
+                     ->whereBetween('deposit_date', [$startDate, $endDate])
+                     ->orderBy('deposit_date')
+                     ->get();
+
+        $totalWeight = $deposits->sum('weight_kg');
+        $totalAmount = $deposits->sum('total_amount');
+
+        return view('pages.petugas.reports.setoran-report', compact(
+            'deposits', 'startDate', 'endDate', 'totalWeight', 'totalAmount'
+        ));
+    }
 }
