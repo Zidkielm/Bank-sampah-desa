@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
@@ -35,8 +34,6 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
     Route::get('/dashboard/tarik-saldo/{id}', [WithdrawalController::class, 'show'])->name('withdrawal.show');
     Route::get('/dashboard/user-balance/{id}', [WithdrawalController::class, 'getUserBalance'])->name('user-balance');
     Route::post('/dashboard/tarik-saldo/report', [WithdrawalController::class, 'report'])->name('withdrawal.report');
-
-    Route::get('/dashboard/iuran', [AdminController::class, 'iuran'])->name('iuran');
 
     Route::get('/dashboard/setoran', [DepositController::class, 'index'])->name('setoran');
     Route::post('/dashboard/setoran', [DepositController::class, 'store'])->name('deposit.store');
