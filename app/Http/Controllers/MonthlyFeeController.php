@@ -41,6 +41,16 @@ class MonthlyFeeController extends Controller
         return view('pages.petugas.iuran', compact('monthlyFees', 'nasabahUsers'));
     }
 
+    public function nasabahIndex()
+    {
+        $monthlyFees = MonthlyFee::with(['user', 'receiver'])
+            ->where('user_id', Auth::id())
+            ->orderBy('payment_date', 'desc')
+            ->paginate(10);
+
+        return view('pages.nasabah.iuran', compact('monthlyFees'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -104,6 +114,68 @@ class MonthlyFeeController extends Controller
         }
     }
 
+    public function nasabahStore(Request $request)
+    {
+        $request->validate([
+            'payment_date' => 'required|date',
+            'amount' => 'required|numeric|min:1000',
+            'payment_method' => 'required|in:cash,transfer',
+            'proof_image' => $request->payment_method == 'transfer' ? 'required|image|max:2048' : 'nullable|image|max:2048',
+            'notes' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $imagePath = null;
+            if ($request->hasFile('proof_image')) {
+                $imagePath = $request->file('proof_image')->store('monthly-fees', 'public');
+            }
+
+            $monthlyFee = MonthlyFee::create([
+                'user_id' => Auth::id(),
+                'receiver_id' => Auth::id(),
+                'payment_date' => $request->payment_date,
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'status' => 'paid',
+                'proof_image' => $imagePath,
+                'notes' => $request->notes,
+            ]);
+
+            // Update balance if payment is deducted from balance
+            if ($request->payment_method === 'balance') {
+                $balance = Balance::where('user_id', Auth::id())->first();
+
+                if ($balance && $balance->amount >= $request->amount) {
+                    $oldBalance = $balance->amount;
+                    $newBalance = $oldBalance - $request->amount;
+                    $balance->amount = $newBalance;
+                    $balance->save();
+
+                    Transaction::create([
+                        'user_id' => Auth::id(),
+                        'transactionable_id' => $monthlyFee->id,
+                        'transactionable_type' => MonthlyFee::class,
+                        'amount' => $request->amount,
+                        'type' => 'debit',
+                        'balance_after' => $newBalance,
+                        'description' => 'Pembayaran iuran bulanan pada ' . date('d-m-Y', strtotime($request->payment_date)),
+                    ]);
+                } else {
+                    DB::rollBack();
+                    return redirect()->back()->with('error', 'Saldo tidak mencukupi untuk pembayaran iuran');
+                }
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pembayaran iuran berhasil disimpan');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menyimpan pembayaran iuran: ' . $e->getMessage());
+        }
+    }
+
     public function show($id)
     {
         $monthlyFee = MonthlyFee::with(['user', 'receiver', 'transaction'])
@@ -114,6 +186,19 @@ class MonthlyFeeController extends Controller
         }
 
         return view('pages.admin.detail-iuran.detail-modal', compact('monthlyFee'));
+    }
+
+    public function nasabahShow($id)
+    {
+        $monthlyFee = MonthlyFee::with(['user', 'receiver', 'transaction'])
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        if (request()->ajax()) {
+            return response()->json($monthlyFee->toArray());
+        }
+
+        return view('pages.nasabah.detail-iuran.detail-modal', compact('monthlyFee'));
     }
 
     public function checkUnpaidUsers()
