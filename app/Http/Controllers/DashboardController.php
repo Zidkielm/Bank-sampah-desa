@@ -12,11 +12,11 @@ class DashboardController extends Controller
             $user = Auth::user();
 
             if ($user->role === 'admin') {
-                return view('pages.admin.dashboard', compact('dataFeed'));
+                return view('pages.admin.dashboard');
             } elseif ($user->role === 'petugas') {
-                return view('pages.petugas.dashboard', compact('dataFeed'));
+                return view('pages.petugas.dashboard');
             } elseif ($user->role === 'nasabah') {
-                return view('pages.nasabah.dashboard', compact('dataFeed'));
+                return view('pages.nasabah.dashboard');
             }
         }
     }

@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // Run monthly fee check on the 1st of each month
+        $schedule->command('monthly-fees:check')->monthlyOn(1, '00:00');
     }
 
     /**

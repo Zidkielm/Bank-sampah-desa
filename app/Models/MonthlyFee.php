@@ -24,6 +24,8 @@ class MonthlyFee extends Model
         'payment_date' => 'date',
     ];
 
+    protected $appends = ['proof_image_url'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
