@@ -90,7 +90,7 @@
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('setoran')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('setoran') }}">
                                 <div class="flex items-center">
                                     <i data-feather="dollar-sign" class="shrink-0 @if(request()->routeIs('setoran')){{ 'text-orange-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16"></i>
-                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Setoran</span>
+                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pengambilan</span>
                                 </div>
                             </a>
                         </li>
@@ -99,7 +99,7 @@
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('tarik-saldo')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('tarik-saldo') }}">
                                 <div class="flex items-center">
                                     <i data-feather="credit-card" class="shrink-0 @if(request()->routeIs('tarik-saldo')){{ 'text-orange-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16"></i>
-                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Tarik Saldo</span>
+                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pembelian</span>
                                 </div>
                             </a>
                         </li>
@@ -123,11 +123,19 @@
                                 </div>
                             </a>
                         </li>
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('petugas.data-nasabah')){{ 'from-orange-500/[0.12] dark:from-orange-500/[0.24] to-orange-500/[0.04]' }}@endif">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('petugas.data-nasabah')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('petugas.data-nasabah') }}">
+                                <div class="flex items-center">
+                                    <i data-feather="users" class="shrink-0 @if(request()->routeIs('petugas.data-nasabah')){{ 'text-orange-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16"></i>
+                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Data Nasabah</span>
+                                </div>
+                            </a>
+                        </li>
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('petugas.setoran')){{ 'from-orange-500/[0.12] dark:from-orange-500/[0.24] to-orange-500/[0.04]' }}@endif">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('petugas.setoran')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="{{ route('petugas.setoran') }}">
                                 <div class="flex items-center">
                                     <i data-feather="dollar-sign" class="shrink-0 @if(request()->routeIs('petugas.setoran')){{ 'text-orange-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }}@endif" width="16" height="16"></i>
-                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Setoran</span>
+                                    <span class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pengambilan</span>
                                 </div>
                             </a>
                         </li>
