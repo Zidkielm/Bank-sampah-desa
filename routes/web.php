@@ -9,6 +9,7 @@ use App\Http\Controllers\WasteTypeController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\MonthlyFeeController;
 use App\Http\Controllers\PetugasDataNasabahController;
+use App\Http\Controllers\NasabahHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,8 +97,11 @@ Route::middleware(['auth:sanctum', 'verified', 'role:petugas'])->group(function 
 // role nasabah
 Route::middleware(['auth:sanctum', 'verified', 'role:nasabah'])->group(function () {
     Route::get('nasabah/dashboard', [DashboardController::class, 'index'])->name('nasabah.dashboard');
-    Route::get('nasabah/dashboard/iuran', [NasabahController::class, 'iuran'])->name('nasabah.iuran');
-    Route::get('nasabah/dashboard/riwayat', [NasabahController::class, 'riwayat'])->name('nasabah.riwayat');
+
+    Route::get('nasabah/dashboard/riwayat/pengambilan', [NasabahHistoryController::class, 'riwayatPengambilan'])->name('nasabah.riwayat.pengambilan');
+    Route::get('nasabah/dashboard/riwayat/pembelian', [NasabahHistoryController::class, 'riwayatPembelian'])->name('nasabah.riwayat.pembelian');
+    Route::get('nasabah/dashboard/riwayat/pengambilan/{id}', [NasabahHistoryController::class, 'showDepositDetail'])->name('nasabah.riwayat.pengambilan.show');
+    Route::get('nasabah/dashboard/riwayat/pembelian/{id}', [NasabahHistoryController::class, 'showWithdrawalDetail'])->name('nasabah.riwayat.pembelian.show');
 
     Route::get('/nasabah/dashboard/iuran', [MonthlyFeeController::class, 'nasabahIndex'])->name('nasabah.iuran');
     Route::post('/nasabah/dashboard/iuran', [MonthlyFeeController::class, 'nasabahStore'])->name('nasabah.monthly-fee.store');
