@@ -5,7 +5,7 @@
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Dashboard Petugas</h1>
             </div>
 
-            <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+            {{-- <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
                 <x-dropdown-filter align="right" />
 
@@ -20,7 +20,7 @@
                     <span class="max-xs:sr-only">Add View</span>
                 </button>
 
-            </div>
+            </div> --}}
 
         </div>
 
@@ -30,7 +30,7 @@
                     <div class="flex items-center">
                         <div class="ml-5 mr-auto">
                             <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Sampah</h2>
-                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">10,000 kg</p>
+                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ number_format($totalSampah) }} kg</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-yellow-500 rounded-2xl">
                             <i data-feather="trash" class="text-white"></i>
@@ -43,7 +43,7 @@
                     <div class="flex items-center">
                         <div class="ml-5 mr-auto">
                             <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Transaksi Setoran</h2>
-                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">500</p>
+                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ number_format($totalSetoran) }}</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-red-500 rounded-2xl">
                             <i data-feather="arrow-up" class="text-white"></i>
@@ -56,7 +56,7 @@
                     <div class="flex items-center">
                         <div class="ml-5 mr-auto">
                             <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Iuran Bulanan</h2>
-                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">Rp. 500,000</p>
+                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">Rp. {{ number_format($totalIuran, 0, ',', '.') }}</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-orange-500 rounded-2xl">
                             <i data-feather="calendar" class="text-white"></i>
