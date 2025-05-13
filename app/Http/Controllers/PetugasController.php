@@ -87,6 +87,13 @@ class PetugasController extends Controller
         return redirect()->back()->with('success', "Data petugas $name berhasil dihapus");
     }
 
+    public function dataNasabah()
+    {
+        $nasabah = User::where('role', 'nasabah')->orderBy('created_at', 'desc')->paginate(6);
+
+        return view('pages.petugas.data-nasabah', compact('nasabah'));
+    }
+
     public function setoran()
     {
         return view('pages.petugas.setoran');
