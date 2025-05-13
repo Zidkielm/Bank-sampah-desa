@@ -85,14 +85,4 @@ class NasabahController extends Controller
             ->back()
             ->with('success', "Data nasabah $name berhasil dihapus");
     }
-
-    public function iuran()
-    {
-        return view('pages.nasabah.iuran');
-    }
-
-    public function riwayat()
-    {
-        return view('pages.nasabah.riwayat');
-    }
 }
