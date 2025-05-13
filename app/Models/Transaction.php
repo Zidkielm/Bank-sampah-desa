@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasFormattedMoney;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    use HasFactory;
+    use HasFactory, HasFormattedMoney;
 
     protected $fillable = [
         'user_id',
@@ -33,5 +34,15 @@ class Transaction extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getFormattedAmountAttribute()
+    {
+        return $this->formatMoney($this->amount);
+    }
+
+    public function getFormattedBalanceAfterAttribute()
+    {
+        return $this->formatMoney($this->balance_after);
     }
 }
