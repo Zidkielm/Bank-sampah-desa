@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Deposit;
 use App\Models\Balance;
 use App\Models\MonthlyFee;
+use App\Models\Withdrawal;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -21,6 +22,10 @@ class DashboardController extends Controller
             $totalSetoran = Deposit::count();
             $totalSaldo = Balance::sum('amount');
             $totalIuran = MonthlyFee::where('status', 'paid')->sum('amount');
+            $totalSaldoUser = Balance::where('user_id', $user->id)->sum('amount');
+            $statusAkun = User::where('id', $user->id)->value('status');
+            $totalSetoranUser = Deposit::where('user_id', $user->id)->count();
+            $totalPenarikanUser = Withdrawal::where('user_id', $user->id)->count();
 
             if ($user->role === 'admin') {
                 return view('pages.admin.dashboard', compact(
@@ -38,7 +43,12 @@ class DashboardController extends Controller
                     'totalIuran',
                 ));
             } elseif ($user->role === 'nasabah') {
-                return view('pages.nasabah.dashboard');
+                return view('pages.nasabah.dashboard', compact(
+                    'totalSaldoUser',
+                    'statusAkun',
+                    'totalSetoranUser',
+                    'totalPenarikanUser'
+                ));
             }
         }
     }
