@@ -11,19 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class AdminController extends Controller
+class WithdrawalController extends Controller
 {
-    public function dataSampah()
-    {
-        return view('pages.admin.data-sampah');
-    }
-
-    public function setoran()
-    {
-        return view('pages.admin.setoran');
-    }
-
-    public function tarikSaldo()
+    public function index()
     {
         $withdrawals = Withdrawal::with(['user', 'processor', 'items'])
             ->orderBy('withdrawal_date', 'desc')
@@ -37,7 +27,7 @@ class AdminController extends Controller
         return view('pages.admin.tarik-saldo', compact('withdrawals', 'nasabahUsers'));
     }
 
-    public function storeWithdrawal(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -132,7 +122,7 @@ class AdminController extends Controller
         }
     }
 
-    public function showWithdrawal($id)
+    public function show($id)
     {
         $withdrawal = Withdrawal::with(['user', 'processor', 'items', 'transaction'])
             ->findOrFail($id);
@@ -152,7 +142,7 @@ class AdminController extends Controller
         return response()->json(['balance' => $amount]);
     }
 
-    public function withdrawalReport(Request $request)
+    public function report(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',

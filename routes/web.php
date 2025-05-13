@@ -1,16 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DataFeedController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\WasteTypeController;
@@ -36,11 +29,12 @@ Route::get('/landing', function () {
 // role admin
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/tarik-saldo', [AdminController::class, 'tarikSaldo'])->name('tarik-saldo');
-    Route::post('/dashboard/tarik-saldo', [AdminController::class, 'storeWithdrawal'])->name('withdrawal.store');
-    Route::get('/dashboard/tarik-saldo/{id}', [AdminController::class, 'showWithdrawal'])->name('withdrawal.show');
-    Route::get('/dashboard/user-balance/{id}', [AdminController::class, 'getUserBalance'])->name('user-balance');
-    Route::post('/dashboard/tarik-saldo/report', [AdminController::class, 'withdrawalReport'])->name('withdrawal.report');
+
+    Route::get('/dashboard/tarik-saldo', [WithdrawalController::class, 'index'])->name('tarik-saldo');
+    Route::post('/dashboard/tarik-saldo', [WithdrawalController::class, 'store'])->name('withdrawal.store');
+    Route::get('/dashboard/tarik-saldo/{id}', [WithdrawalController::class, 'show'])->name('withdrawal.show');
+    Route::get('/dashboard/user-balance/{id}', [WithdrawalController::class, 'getUserBalance'])->name('user-balance');
+    Route::post('/dashboard/tarik-saldo/report', [WithdrawalController::class, 'report'])->name('withdrawal.report');
 
     Route::get('/dashboard/iuran', [AdminController::class, 'iuran'])->name('iuran');
 
