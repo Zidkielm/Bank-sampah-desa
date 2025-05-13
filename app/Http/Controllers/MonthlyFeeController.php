@@ -27,6 +27,20 @@ class MonthlyFeeController extends Controller
         return view('pages.admin.iuran', compact('monthlyFees', 'nasabahUsers'));
     }
 
+    public function petugasIndex()
+    {
+        $monthlyFees = MonthlyFee::with(['user', 'receiver'])
+            ->orderBy('payment_date', 'desc')
+            ->paginate(10);
+
+        $nasabahUsers = User::where('role', 'nasabah')
+            ->where('status', 'active')
+            ->orderBy('name')
+            ->get();
+
+        return view('pages.petugas.iuran', compact('monthlyFees', 'nasabahUsers'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
