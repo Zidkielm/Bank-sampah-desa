@@ -29,11 +29,11 @@
                 <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5">
                     <div class="flex items-center">
                         <div class="ml-5 mr-auto">
-                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Sampah</h2>
-                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">10,000 kg</p>
+                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Saldo</h2>
+                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">Rp. {{ number_format($totalSaldoUser, 0, ',', '.') }}</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-yellow-500 rounded-2xl">
-                            <i data-feather="trash" class="text-white"></i>
+                            <i data-feather="dollar-sign" class="text-white"></i>
                         </div>
                     </div>
                 </div>
@@ -42,11 +42,11 @@
                 <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5">
                     <div class="flex items-center">
                         <div class="ml-5 mr-auto">
-                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Transaksi Setoran</h2>
-                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">500</p>
+                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Status Akun</h2>
+                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ $statusAkun }}</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-red-500 rounded-2xl">
-                            <i data-feather="arrow-up" class="text-white"></i>
+                            <i data-feather="shield" class="text-white"></i>
                         </div>
                     </div>
                 </div>
@@ -55,11 +55,24 @@
                 <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5">
                     <div class="flex items-center">
                         <div class="ml-5 mr-auto">
-                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Iuran Bulanan</h2>
-                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">Rp. 500,000</p>
+                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Pengambilan</h2>
+                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ number_format($totalSetoranUser) }}</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-orange-500 rounded-2xl">
-                            <i data-feather="calendar" class="text-white"></i>
+                            <i data-feather="package" class="text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 sm:col-span-4 xl:col-span-3">
+                <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5">
+                    <div class="flex items-center">
+                        <div class="ml-5 mr-auto">
+                            <h2 class="text-gray-600 dark:text-gray-200 text-sm font-medium">Total Pembelian</h2>
+                            <p class="text-lg text-gray-800 dark:text-gray-100 font-semibold">{{ number_format($totalPenarikanUser) }}</p>
+                        </div>
+                        <div class="flex items-center justify-center w-10 h-10 bg-orange-500 rounded-2xl">
+                            <i data-feather="shopping-cart" class="text-white"></i>
                         </div>
                     </div>
                 </div>
