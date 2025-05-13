@@ -14,14 +14,14 @@ class WasteType extends Model
         'price_per_kg',
         'image_path',
         'description',
-        'is_active'
+        'status'
     ];
 
     public function deposits()
     {
         return $this->hasMany(Deposit::class);
     }
-    
+
     public function getImageUrlAttribute()
     {
         return $this->image_path ? asset('storage/' . $this->image_path) : null;
