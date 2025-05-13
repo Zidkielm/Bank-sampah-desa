@@ -8,6 +8,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\WasteTypeController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\MonthlyFeeController;
+use App\Http\Controllers\PetugasDataNasabahController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,11 +73,24 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
 // role petugas
 Route::middleware(['auth:sanctum', 'verified', 'role:petugas'])->group(function () {
     Route::get('petugas/dashboard', [DashboardController::class, 'index'])->name('petugas.dashboard');
+
     Route::get('petugas/dashboard/setoran', [DepositController::class, 'petugasIndex'])->name('petugas.setoran');
     Route::post('petugas/dashboard/setoran', [DepositController::class, 'store'])->name('petugas.deposit.store');
     Route::get('petugas/dashboard/setoran/{id}', [DepositController::class, 'show'])->name('petugas.deposit.show');
     Route::get('petugas/dashboard/waste-type-price/{id}', [DepositController::class, 'getWasteTypePrice'])->name('petugas.waste-type-price');
-    Route::get('petugas/dashboard/iuran', [PetugasController::class, 'iuran'])->name('petugas.iuran');
+    Route::post('petugas/dashboard/setoran/report', [DepositController::class, 'petugasGenerateReport'])->name('petugas.deposit.report');
+
+    Route::get('/petugas/dashboard/iuran', [MonthlyFeeController::class, 'petugasIndex'])->name('petugas.iuran');
+    Route::post('/petugas/dashboard/iuran', [MonthlyFeeController::class, 'store'])->name('petugas.monthly-fee.store');
+    Route::get('/petugas/dashboard/iuran/check-unpaid', [MonthlyFeeController::class, 'checkUnpaidUsers'])->name('petugas.monthly-fee.check-unpaid');
+    Route::get('/petugas/dashboard/iuran/{id}', [MonthlyFeeController::class, 'show'])->name('petugas.monthly-fee.show');
+
+    Route::resource('petugas/dashboard/nasabah', PetugasDataNasabahController::class)->names([
+        'store' => 'petugas.nasabah.store',
+        'update' => 'petugas.nasabah.update',
+        'destroy' => 'petugas.nasabah.destroy',
+        'index' => 'petugas.data-nasabah',
+    ])->except(['create', 'show', 'edit']);
 });
 
 // role nasabah
