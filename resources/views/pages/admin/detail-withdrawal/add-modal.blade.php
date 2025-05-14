@@ -39,7 +39,7 @@
                                     dark:bg-gray-700 dark:text-white">
                                     <option value="">Pilih nasabah</option>
                                     @foreach ($nasabahUsers as $nasabah)
-                                        <option value="{{ $nasabah->id }}">{{ $nasabah->name }}</option>
+                                    <option value="{{ $nasabah->id }}">{{ $nasabah->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
