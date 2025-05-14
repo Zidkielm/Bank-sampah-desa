@@ -38,7 +38,7 @@
                                     dark:bg-gray-700 dark:text-white">
                                     <option value="">Pilih nasabah</option>
                                     @foreach ($nasabahUsers as $nasabah)
-                                        <option value="{{ $nasabah->id }}">{{ $nasabah->name }}</option>
+                                    <option value="{{ $nasabah->id }}">{{ $nasabah->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -68,7 +68,7 @@
                                         class="pl-10 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600
                                         shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50
                                         dark:bg-gray-700 dark:text-white"
-                                        value="10000">
+                                        value="25000">
                                 </div>
                             </div>
 
@@ -86,12 +86,11 @@
                                 </select>
                             </div>
 
-                            <div class="mb-4" x-show="paymentMethod === 'transfer'">
+                            <div class="mb-4">
                                 <label for="proof_image"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bukti Pembayaran
                                     <span class="text-red-500">*</span></label>
                                 <input type="file" id="proof_image" name="proof_image"
-                                    :required="paymentMethod === 'transfer'"
                                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600
                                     shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50
                                     dark:bg-gray-700 dark:text-white"
@@ -114,7 +113,7 @@
                             <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mb-4">
                                 <h4 class="font-medium text-sm text-gray-700 dark:text-gray-300 mb-2">Tata Cara
                                     Pembayaran:</h4>
-                                <ol class="list-decimal pl-5 text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                                <ol class="list-decimal pl-5 text-sm text-grey-600 dark:text-gray-400 space-y-1">
                                     <li>Isi tanggal pembayaran</li>
                                     <li>Pilih metode pembayaran</li>
                                     <li>Jika transfer, kirim ke rekening BCA 1452671451 a.n. Nur Hartanto</li>
