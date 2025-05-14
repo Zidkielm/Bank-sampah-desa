@@ -38,7 +38,7 @@
                                     dark:bg-gray-700 dark:text-white">
                                     <option value="">Pilih nasabah</option>
                                     @foreach ($nasabahUsers as $nasabah)
-                                        <option value="{{ $nasabah->id }}">{{ $nasabah->name }}</option>
+                                    <option value="{{ $nasabah->id }}">{{ $nasabah->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -68,7 +68,7 @@
                                         class="pl-10 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600
                                         shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50
                                         dark:bg-gray-700 dark:text-white"
-                                        value="10000">
+                                        value="25000">
                                 </div>
                             </div>
 
@@ -86,12 +86,11 @@
                                 </select>
                             </div>
 
-                            <div class="mb-4" x-show="paymentMethod === 'transfer'">
+                            <div class="mb-4">
                                 <label for="proof_image"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bukti Pembayaran
                                     <span class="text-red-500">*</span></label>
                                 <input type="file" id="proof_image" name="proof_image"
-                                    :required="paymentMethod === 'transfer'"
                                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600
                                     shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50
                                     dark:bg-gray-700 dark:text-white"
