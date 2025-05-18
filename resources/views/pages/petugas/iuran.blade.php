@@ -56,16 +56,34 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
-            <div class="mb-6">
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
+            <form action="{{ route('petugas.iuran') }}" method="GET">
+                <div class="flex flex-col md:flex-row md:justify-between gap-4 mb-6">
+                    <div class="w-full md:w-1/2">
+                        <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Nasabah</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
+                            </div>
+                            <input type="text" name="search" id="search"
+                                class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg pl-10 p-2.5 w-full"
+                                placeholder="Masukkan nama" value="{{ request('search') }}">
+                        </div>
                     </div>
-                    <input type="text"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full pl-10 p-2.5 w-full md:w-80"
-                        placeholder="Masukkan nama">
+                    <div class="w-full md:w-1/2 flex flex-col md:flex-row md:justify-end gap-4">
+                        <div class="w-full md:w-2/3">
+                            <label for="month" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bulan</label>
+                            <input type="month" name="month" id="month"
+                                class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg p-2.5 w-full"
+                                value="{{ request('month', date('Y-m')) }}">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors">
+                                <i data-feather="filter" class="h-4 w-4 inline-block mr-1"></i> Filter
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
 
             <div class="overflow-x-auto">
                 <table class="w-full">

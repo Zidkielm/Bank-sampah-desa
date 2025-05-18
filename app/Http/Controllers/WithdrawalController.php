@@ -13,11 +13,23 @@ use Illuminate\Support\Facades\DB;
 
 class WithdrawalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $withdrawals = Withdrawal::with(['user', 'processor', 'items'])
-            ->orderBy('withdrawal_date', 'desc')
-            ->paginate(10);
+        $query = Withdrawal::with(['user', 'processor', 'items']);
+
+        // Apply search filter
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+            });
+        }
+
+        $withdrawals = $query->orderBy('withdrawal_date', 'desc')
+                           ->paginate(10)
+                           ->withQueryString();
 
         $nasabahUsers = User::where('role', 'nasabah')
             ->where('status', 'active')
@@ -160,8 +172,52 @@ class WithdrawalController extends Controller
         $totalAmount = $withdrawals->sum('amount');
         $totalCashAmount = $withdrawals->sum('cash_amount');
 
-        return view('pages.admin.reports.withdrawal-report', compact(
-            'withdrawals', 'startDate', 'endDate', 'totalAmount', 'totalCashAmount'
-        ));
+        // Generate CSV export
+        $filename = 'laporan_penarikan_' . date('Ymd_His') . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $callback = function() use ($withdrawals, $totalAmount, $totalCashAmount) {
+            $file = fopen('php://output', 'w');
+
+            fputs($file, "\xEF\xBB\xBF");
+
+            fputcsv($file, [
+                'No.',
+                'Tanggal',
+                'Nasabah',
+                'Total Belanja',
+                'Dari Saldo',
+                'Tunai',
+                'Petugas'
+            ]);
+
+            $counter = 1;
+            foreach ($withdrawals as $withdrawal) {
+                fputcsv($file, [
+                    $counter++,
+                    $withdrawal->withdrawal_date->format('d-m-Y'),
+                    $withdrawal->user->name,
+                    number_format($withdrawal->total_amount, 0, ',', '.'),
+                    number_format($withdrawal->amount, 0, ',', '.'),
+                    number_format($withdrawal->cash_amount, 0, ',', '.'),
+                    $withdrawal->processor->name
+                ]);
+            }
+
+            fputcsv($file, ['']);
+            fputcsv($file, ['Total Penarikan dari Saldo', '', '', '', number_format($totalAmount, 0, ',', '.')]);
+            fputcsv($file, ['Total Pembayaran Tunai', '', '', '', number_format($totalCashAmount, 0, ',', '.')]);
+            fputcsv($file, ['Total Keseluruhan', '', '', '', number_format($totalAmount + $totalCashAmount, 0, ',', '.')]);
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

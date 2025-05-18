@@ -18,15 +18,15 @@
                     @livewire('profile.update-password-form')
                 </div>
 
-                <x-section-border />
+                {{-- <x-section-border /> --}}
             @endif
 
-            @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
+            {{-- @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
 
                 <div class="mt-10 sm:mt-0">
                     @livewire('profile.delete-user-form')
                 </div>
-            @endif
+            @endif --}}
         </div>
     </div>
 </x-app-layout>

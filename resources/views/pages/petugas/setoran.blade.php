@@ -81,14 +81,16 @@
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
             <div class="mb-6">
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
+                <form action="{{ route('petugas.setoran') }}" method="GET">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                        <input type="text" name="search"
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full pl-10 p-2.5 w-full md:w-80"
+                            placeholder="Masukkan nama nasabah" value="{{ request('search') }}">
                     </div>
-                    <input type="text"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full pl-10 p-2.5 w-full md:w-80"
-                        placeholder="Masukkan nama">
-                </div>
+                </form>
             </div>
 
             <div class="overflow-x-auto">
@@ -161,9 +163,9 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Cetak laporan setoran sampah</h2>
+            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Export laporan setoran sampah</h2>
 
-            <form action="{{ route('petugas.deposit.report') }}" method="POST" target="_blank">
+            <form action="{{ route('petugas.deposit.report') }}" method="POST">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
@@ -184,7 +186,7 @@
 
                 <button type="submit"
                     class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-15 rounded-lg transition-colors w-full md:w-auto">
-                    Cetak
+                    <i data-feather="download" class="h-4 w-4 inline-block mr-1"></i> Export CSV
                 </button>
             </form>
         </div>

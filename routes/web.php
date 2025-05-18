@@ -69,6 +69,9 @@ Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function ()
         'update' => 'admin.waste-types.update',
         'destroy' => 'admin.waste-types.destroy',
     ])->except(['create', 'show', 'edit']);
+
+    Route::post('/monthly-fee/approve/{id}', [MonthlyFeeController::class, 'approve'])->name('monthly-fee.approve');
+    Route::post('/monthly-fee/reject/{id}', [MonthlyFeeController::class, 'reject'])->name('monthly-fee.reject');
 });
 
 // role petugas
@@ -85,6 +88,9 @@ Route::middleware(['auth:sanctum', 'verified', 'role:petugas'])->group(function 
     Route::post('/petugas/dashboard/iuran', [MonthlyFeeController::class, 'store'])->name('petugas.monthly-fee.store');
     Route::get('/petugas/dashboard/iuran/check-unpaid', [MonthlyFeeController::class, 'checkUnpaidUsers'])->name('petugas.monthly-fee.check-unpaid');
     Route::get('/petugas/dashboard/iuran/{id}', [MonthlyFeeController::class, 'show'])->name('petugas.monthly-fee.show');
+
+    Route::post('/petugas/monthly-fee/approve/{id}', [MonthlyFeeController::class, 'approve'])->name('petugas.monthly-fee.approve');
+    Route::post('/petugas/monthly-fee/reject/{id}', [MonthlyFeeController::class, 'reject'])->name('petugas.monthly-fee.reject');
 
     Route::resource('petugas/dashboard/nasabah', PetugasDataNasabahController::class)->names([
         'store' => 'petugas.nasabah.store',

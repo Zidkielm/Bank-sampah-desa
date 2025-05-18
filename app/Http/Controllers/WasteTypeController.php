@@ -8,9 +8,21 @@ use Illuminate\Support\Facades\Storage;
 
 class WasteTypeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $wasteTypes = WasteType::orderBy('created_at', 'desc')->paginate(6);
+        $query = WasteType::query();
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        $wasteTypes = $query->orderBy('created_at', 'desc')
+                          ->paginate(6)
+                          ->withQueryString();
 
         return view('pages.admin.data-sampah', compact('wasteTypes'));
     }
