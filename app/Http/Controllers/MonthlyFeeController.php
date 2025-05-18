@@ -13,11 +13,33 @@ use Carbon\Carbon;
 
 class MonthlyFeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $monthlyFees = MonthlyFee::with(['user', 'receiver'])
-            ->orderBy('payment_date', 'desc')
-            ->paginate(10);
+        $query = MonthlyFee::with(['user', 'receiver']);
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply month filter - simple implementation
+        if ($request->has('month') && $request->month != '') {
+            $monthYear = explode('-', $request->month);
+            if (count($monthYear) === 2) {
+                $year = $monthYear[0];
+                $month = $monthYear[1];
+                $query->whereYear('payment_date', $year)
+                      ->whereMonth('payment_date', $month);
+            }
+        }
+
+        $monthlyFees = $query->orderBy('payment_date', 'desc')
+                            ->paginate(10)
+                            ->withQueryString();
 
         $nasabahUsers = User::where('role', 'nasabah')
             ->where('status', 'active')
@@ -27,11 +49,33 @@ class MonthlyFeeController extends Controller
         return view('pages.admin.iuran', compact('monthlyFees', 'nasabahUsers'));
     }
 
-    public function petugasIndex()
+    public function petugasIndex(Request $request)
     {
-        $monthlyFees = MonthlyFee::with(['user', 'receiver'])
-            ->orderBy('payment_date', 'desc')
-            ->paginate(10);
+        $query = MonthlyFee::with(['user', 'receiver']);
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply month filter - simple implementation
+        if ($request->has('month') && $request->month != '') {
+            $monthYear = explode('-', $request->month);
+            if (count($monthYear) === 2) {
+                $year = $monthYear[0];
+                $month = $monthYear[1];
+                $query->whereYear('payment_date', $year)
+                      ->whereMonth('payment_date', $month);
+            }
+        }
+
+        $monthlyFees = $query->orderBy('payment_date', 'desc')
+                            ->paginate(10)
+                            ->withQueryString();
 
         $nasabahUsers = User::where('role', 'nasabah')
             ->where('status', 'active')
@@ -41,12 +85,34 @@ class MonthlyFeeController extends Controller
         return view('pages.petugas.iuran', compact('monthlyFees', 'nasabahUsers'));
     }
 
-    public function nasabahIndex()
+    public function nasabahIndex(Request $request)
     {
-        $monthlyFees = MonthlyFee::with(['user', 'receiver'])
-            ->where('user_id', Auth::id())
-            ->orderBy('payment_date', 'desc')
-            ->paginate(10);
+        $query = MonthlyFee::with(['user', 'receiver'])
+            ->where('user_id', Auth::id());
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Apply month filter - simple implementation
+        if ($request->has('month') && $request->month != '') {
+            $monthYear = explode('-', $request->month);
+            if (count($monthYear) === 2) {
+                $year = $monthYear[0];
+                $month = $monthYear[1];
+                $query->whereYear('payment_date', $year)
+                      ->whereMonth('payment_date', $month);
+            }
+        }
+
+        $monthlyFees = $query->orderBy('payment_date', 'desc')
+                            ->paginate(10)
+                            ->withQueryString();
 
         return view('pages.nasabah.iuran', compact('monthlyFees'));
     }
@@ -62,6 +128,20 @@ class MonthlyFeeController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        $paymentDate = Carbon::parse($request->payment_date);
+        $monthYear = $paymentDate->format('Y-m');
+
+        $existingPayment = MonthlyFee::where('user_id', $request->user_id)
+            ->whereYear('payment_date', $paymentDate->year)
+            ->whereMonth('payment_date', $paymentDate->month)
+            ->where('status', 'paid')
+            ->exists();
+
+        if ($existingPayment) {
+            $monthName = $paymentDate->locale('id')->monthName;
+            return redirect()->back()->with('error', "Tidak dapat membayar iuran karena nasabah sudah membayar untuk bulan {$monthName} {$paymentDate->year}.");
+        }
+
         DB::beginTransaction();
 
         try {
@@ -70,19 +150,20 @@ class MonthlyFeeController extends Controller
                 $imagePath = $request->file('proof_image')->store('monthly-fees', 'public');
             }
 
+            $status = Auth::user()->role === 'nasabah' ? 'unpaid' : 'paid';
+
             $monthlyFee = MonthlyFee::create([
                 'user_id' => $request->user_id,
                 'receiver_id' => Auth::id(),
                 'payment_date' => $request->payment_date,
                 'amount' => $request->amount,
                 'payment_method' => $request->payment_method,
-                'status' => 'paid',
+                'status' => $status,
                 'proof_image' => $imagePath,
                 'notes' => $request->notes,
             ]);
 
-            // Update balance if payment is deducted from balance
-            if ($request->payment_method === 'balance') {
+            if ($request->payment_method === 'balance' && $status === 'paid') {
                 $balance = Balance::where('user_id', $request->user_id)->first();
 
                 if ($balance && $balance->amount >= $request->amount) {
@@ -106,8 +187,16 @@ class MonthlyFeeController extends Controller
                 }
             }
 
+            if ($status === 'paid') {
+                $user = User::find($request->user_id);
+                if ($user && $user->status === 'inactive') {
+                    $user->status = 'active';
+                    $user->save();
+                }
+            }
+
             DB::commit();
-            return redirect()->back()->with('success', 'Pembayaran iuran berhasil disimpan');
+            return redirect()->back()->with('success', 'Pembayaran iuran berhasil disimpan' . ($status === 'unpaid' ? ' dan menunggu persetujuan admin' : ''));
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal menyimpan pembayaran iuran: ' . $e->getMessage());
@@ -124,6 +213,20 @@ class MonthlyFeeController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        $paymentDate = Carbon::parse($request->payment_date);
+        $monthYear = $paymentDate->format('Y-m');
+
+        $existingPayment = MonthlyFee::where('user_id', Auth::id())
+            ->whereYear('payment_date', $paymentDate->year)
+            ->whereMonth('payment_date', $paymentDate->month)
+            ->whereIn('status', ['paid', 'unpaid'])
+            ->exists();
+
+        if ($existingPayment) {
+            $monthName = $paymentDate->locale('id')->monthName;
+            return redirect()->back()->with('error', "Tidak dapat membayar iuran karena Anda sudah membayar atau memiliki pembayaran tertunda untuk bulan {$monthName} {$paymentDate->year}.");
+        }
+
         DB::beginTransaction();
 
         try {
@@ -138,41 +241,92 @@ class MonthlyFeeController extends Controller
                 'payment_date' => $request->payment_date,
                 'amount' => $request->amount,
                 'payment_method' => $request->payment_method,
-                'status' => 'paid',
+                'status' => 'unpaid',
                 'proof_image' => $imagePath,
                 'notes' => $request->notes,
             ]);
 
-            // Update balance if payment is deducted from balance
-            if ($request->payment_method === 'balance') {
-                $balance = Balance::where('user_id', Auth::id())->first();
+            DB::commit();
+            return redirect()->back()->with('success', 'Pembayaran iuran berhasil disimpan dan menunggu persetujuan admin');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menyimpan pembayaran iuran: ' . $e->getMessage());
+        }
+    }
 
-                if ($balance && $balance->amount >= $request->amount) {
+    public function approve($id)
+    {
+        DB::beginTransaction();
+        try {
+            $monthlyFee = MonthlyFee::findOrFail($id);
+
+            if ($monthlyFee->status === 'paid') {
+                return redirect()->back()->with('error', 'Pembayaran ini sudah disetujui sebelumnya');
+            }
+
+            $monthlyFee->status = 'paid';
+            $monthlyFee->save();
+
+            $user = User::find($monthlyFee->user_id);
+            if ($user && $user->status === 'inactive') {
+                $user->status = 'active';
+                $user->save();
+            }
+
+            if ($monthlyFee->payment_method === 'balance') {
+                $balance = Balance::where('user_id', $monthlyFee->user_id)->first();
+
+                if ($balance && $balance->amount >= $monthlyFee->amount) {
                     $oldBalance = $balance->amount;
-                    $newBalance = $oldBalance - $request->amount;
+                    $newBalance = $oldBalance - $monthlyFee->amount;
                     $balance->amount = $newBalance;
                     $balance->save();
 
                     Transaction::create([
-                        'user_id' => Auth::id(),
+                        'user_id' => $monthlyFee->user_id,
                         'transactionable_id' => $monthlyFee->id,
                         'transactionable_type' => MonthlyFee::class,
-                        'amount' => $request->amount,
+                        'amount' => $monthlyFee->amount,
                         'type' => 'debit',
                         'balance_after' => $newBalance,
-                        'description' => 'Pembayaran iuran bulanan pada ' . date('d-m-Y', strtotime($request->payment_date)),
+                        'description' => 'Pembayaran iuran bulanan pada ' . $monthlyFee->payment_date->format('d-m-Y'),
                     ]);
                 } else {
                     DB::rollBack();
-                    return redirect()->back()->with('error', 'Saldo tidak mencukupi untuk pembayaran iuran');
+                    return redirect()->back()->with('error', 'Saldo nasabah tidak mencukupi untuk pembayaran iuran');
                 }
             }
 
             DB::commit();
-            return redirect()->back()->with('success', 'Pembayaran iuran berhasil disimpan');
+            return redirect()->back()->with('success', 'Pembayaran iuran berhasil disetujui');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal menyimpan pembayaran iuran: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menyetujui pembayaran: ' . $e->getMessage());
+        }
+    }
+
+    public function reject($id)
+    {
+        DB::beginTransaction();
+        try {
+            $monthlyFee = MonthlyFee::findOrFail($id);
+
+            if ($monthlyFee->status === 'paid') {
+                return redirect()->back()->with('error', 'Pembayaran ini sudah disetujui sebelumnya');
+            }
+
+            if ($monthlyFee->status === 'partial') {
+                return redirect()->back()->with('error', 'Pembayaran ini sudah ditolak sebelumnya');
+            }
+
+            $monthlyFee->status = 'partial';
+            $monthlyFee->save();
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pembayaran iuran berhasil ditolak');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menolak pembayaran: ' . $e->getMessage());
         }
     }
 
