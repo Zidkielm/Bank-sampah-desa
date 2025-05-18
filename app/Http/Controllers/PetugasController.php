@@ -9,9 +9,23 @@ use Illuminate\Validation\Rule;
 
 class PetugasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $petugas = User::where('role', 'petugas')->orderBy('created_at', 'desc')->paginate(6);
+        $query = User::where('role', 'petugas');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+            });
+        }
+
+        $petugas = $query->orderBy('created_at', 'desc')
+                        ->paginate(6)
+                        ->withQueryString();
 
         return view('pages.admin.data-petugas', compact('petugas'));
     }
