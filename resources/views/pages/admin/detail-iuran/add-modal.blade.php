@@ -63,7 +63,7 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <span class="text-gray-500 dark:text-gray-400 sm:text-sm">Rp</span>
                                     </div>
-                                    <input type="number" id="amount" name="amount" required min="1000"
+                                    <input type="number" id="amount" name="amount" required min="25000"
                                         step="500"
                                         class="pl-10 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600
                                         shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50
@@ -118,7 +118,7 @@
                                     <li>Pilih metode pembayaran</li>
                                     <li>Jika transfer, kirim ke rekening BCA 1452671451 a.n. Nur Hartanto</li>
                                     <li>Jika tunai, nasabah hanya perlu memberikan uang kepada petugas</li>
-                                    <li>Upload file foto bukti pembayaran (jika transfer)</li>
+                                    <li>Upload file foto bukti pembayaran</li>
                                     <li>Klik simpan</li>
                                 </ol>
                             </div>

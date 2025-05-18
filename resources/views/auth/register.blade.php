@@ -31,28 +31,25 @@
         </div>
         <div class="flex items-center justify-between mt-6">
             <div class="mr-1">
-                <label class="flex items-center" name="newsletter" id="newsletter">
-                    <input type="checkbox" class="form-checkbox" />
-                    <span class="text-sm ml-2">Email me about product news.</span>
-                </label>
+
             </div>
             <x-button>
                 {{ __('Sign Up') }}
             </x-button>
         </div>
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-6">
-                    <label class="flex items-start">
-                        <input type="checkbox" class="form-checkbox mt-1" name="terms" id="terms" />
-                        <span class="text-sm ml-2">
-                            {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="text-sm underline hover:no-underline">'.__('Terms of Service').'</a>',
-                                'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="text-sm underline hover:no-underline">'.__('Privacy Policy').'</a>',
-                            ]) !!}
-                        </span>
-                    </label>
-                </div>
-            @endif
+        @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+        <div class="mt-6">
+            <label class="flex items-start">
+                <input type="checkbox" class="form-checkbox mt-1" name="terms" id="terms" />
+                <span class="text-sm ml-2">
+                    {!! __('I agree to the :terms_of_service and :privacy_policy', [
+                    'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="text-sm underline hover:no-underline">'.__('Terms of Service').'</a>',
+                    'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="text-sm underline hover:no-underline">'.__('Privacy Policy').'</a>',
+                    ]) !!}
+                </span>
+            </label>
+        </div>
+        @endif
     </form>
     <x-validation-errors class="mt-4" />
     <!-- Footer -->
