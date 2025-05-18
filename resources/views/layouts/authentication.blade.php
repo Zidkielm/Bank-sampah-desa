@@ -46,7 +46,8 @@
                         <div class="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
                             <!-- Logo -->
                             <a class="block" href="/">
-                                <img class="mr-3 h-10 w-auto" src="{{ asset('images/logo.svg') }}" alt="Logo">
+                                <img class="mr-3 h-24 w-auto pt-4" src="{{ asset('images/logo-bank-sampah.svg') }}"
+                                    alt="Logo">
                             </a>
                         </div>
                     </div>
@@ -61,8 +62,9 @@
 
             <!-- Image -->
             <div class="absolute bottom-0 right-0 top-0 hidden md:block md:w-1/2" aria-hidden="true">
-                <img class="h-full w-full object-cover object-center" src="{{ asset('images/tentang-kami-3.png') }}"
-                    width="760" height="1024" alt="Authentication image" />
+                <img class="h-full w-full object-cover object-center"
+                    src="{{ asset('images/IMG-20250516-WA0013.jpg') }}" width="760" height="1024"
+                    alt="Authentication image" />
             </div>
 
         </div>
