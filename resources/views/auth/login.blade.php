@@ -1,5 +1,5 @@
 <x-authentication-layout>
-    <h1 class="mb-6 text-3xl font-bold text-gray-800 dark:text-gray-100">{{ __('Welcome back!') }}</h1>
+    <h1 class="mb-6 text-3xl font-bold text-gray-800 dark:text-gray-100">{{ __('Selamat Datang!') }}</h1>
     @if (session('status'))
         <div class="mb-4 text-sm font-medium text-green-600">
             {{ session('status') }}
