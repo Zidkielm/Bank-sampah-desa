@@ -9,9 +9,21 @@ use Illuminate\Validation\Rule;
 
 class PetugasDataNasabahController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $nasabah = User::where('role', 'nasabah')->with('balance')->orderBy('created_at', 'desc')->paginate(6);
+        $query = User::where('role', 'nasabah')->with('balance');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%')
+                  ->orWhere('alamat', 'like', '%' . $search . '%');
+            });
+        }
+
+        $nasabah = $query->orderBy('created_at', 'desc')->paginate(6)->withQueryString();
 
         foreach ($nasabah as $user) {
             $user->saldo = $user->balance ? $user->balance->amount : 0;
