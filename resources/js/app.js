@@ -128,3 +128,101 @@ document.addEventListener('DOMContentLoaded', () => {
   dashboardCard09();
   dashboardCard11();
 });
+
+            // Initialize Feather icons
+            feather.replace()
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button')
+            const mobileMenu = document.getElementById('mobile-menu')
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden')
+            })
+
+            // Carousel Functionality
+            const carousel = document.getElementById('carousel')
+            const carouselItems = document.querySelectorAll('.carousel-item')
+            const prevBtn = document.getElementById('prevBtn')
+            const nextBtn = document.getElementById('nextBtn')
+            const indicators = document.querySelectorAll('.carousel-indicator')
+
+            let currentIndex = 0
+            const totalItems = carouselItems.length
+
+            // Auto slide functionality
+            let autoSlideInterval
+
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(() => {
+                    goToSlide((currentIndex + 1) % totalItems)
+                }, 5000) // Change slide every 5 seconds
+            }
+
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval)
+            }
+
+            function goToSlide(index) {
+                currentIndex = index
+                carousel.style.transform = `translateX(-${currentIndex * 100}%)`
+
+                // Update indicators
+                indicators.forEach((indicator, i) => {
+                    if (i === currentIndex) {
+                        indicator.classList.remove('bg-gray-300')
+                        indicator.classList.add('bg-primary')
+                        indicator.classList.add('opacity-100')
+                    } else {
+                        indicator.classList.remove('bg-primary')
+                        indicator.classList.remove('opacity-100')
+                        indicator.classList.add('bg-gray-300')
+                    }
+                })
+            }
+
+            prevBtn.addEventListener('click', () => {
+                stopAutoSlide()
+                goToSlide((currentIndex - 1 + totalItems) % totalItems)
+                startAutoSlide()
+            })
+
+            nextBtn.addEventListener('click', () => {
+                stopAutoSlide()
+                goToSlide((currentIndex + 1) % totalItems)
+                startAutoSlide()
+            })
+
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    stopAutoSlide()
+                    goToSlide(index)
+                    startAutoSlide()
+                })
+            })
+
+            // Start auto slide on page load
+            startAutoSlide()
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault()
+
+                    const targetId = this.getAttribute('href')
+                    if (targetId === '#') return
+
+                    const targetElement = document.querySelector(targetId)
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // Adjust for navbar height
+                            behavior: 'smooth',
+                        })
+
+                        // Close mobile menu if open
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden')
+                        }
+                    }
+                })
+            })
