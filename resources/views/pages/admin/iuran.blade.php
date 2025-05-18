@@ -24,28 +24,28 @@
         }
     }">
         @if (session('success'))
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
-                <div class="flex">
-                    <div class="py-1"><i data-feather="check-circle" class="h-5 w-5 text-green-500 mr-3"></i></div>
-                    <div>{{ session('success') }}</div>
-                </div>
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+            <div class="flex">
+                <div class="py-1"><i data-feather="check-circle" class="h-5 w-5 text-green-500 mr-3"></i></div>
+                <div>{{ session('success') }}</div>
             </div>
+        </div>
         @endif
 
         @if (session('error'))
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
-                <div class="flex">
-                    <div class="py-1"><i data-feather="alert-circle" class="h-5 w-5 text-red-500 mr-3"></i></div>
-                    <div>{{ session('error') }}</div>
-                </div>
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+            <div class="flex">
+                <div class="py-1"><i data-feather="alert-circle" class="h-5 w-5 text-red-500 mr-3"></i></div>
+                <div>{{ session('error') }}</div>
             </div>
+        </div>
         @endif
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Iuran Bulanan</h1>
             <div class="flex space-x-2">
                 <a href="{{ route('monthly-fee.check-unpaid') }}"
-                   class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                     <i data-feather="user-check" class="h-4 w-4 inline-block mr-1"></i> Cek Yang Belum Bayar
                 </a>
                 <button @click="showAddModal = true"
@@ -76,51 +76,55 @@
                             <th class="px-4 py-3">Tgl. Pembayaran</th>
                             <th class="px-4 py-3">Jumlah</th>
                             <th class="px-4 py-3">Metode</th>
-                            <th class="px-4 py-3">Penerima</th>
+                            <th class="px-4 py-3">Pengirim</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3 rounded-r-lg">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                         @forelse($monthlyFees as $index => $fee)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ $monthlyFees->firstItem() + $index }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $fee->user->name }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ $fee->payment_date ? $fee->payment_date->format('d-m-Y') : '-' }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    Rp {{ number_format($fee->amount, 0, ',', '.') }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ $fee->payment_method === 'cash' ? 'Tunai' : 'Transfer' }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ $fee->receiver ? $fee->receiver->name : '-' }}</td>
-                                <td class="px-4 py-4">
-                                    @if ($fee->status === 'paid')
-                                        <span
-                                            class="px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
-                                            Lunas
-                                        </span>
-                                    @else
-                                        <span
-                                            class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
-                                            Belum Lunas
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-4">
-                                    <button class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        @click="getFeeDetails({{ $fee->id }})">
-                                        <i data-feather="eye" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                {{ $monthlyFees->firstItem() + $index }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $fee->user->name }}</td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                {{ $fee->payment_date ? $fee->payment_date->format('d-m-Y') : '-' }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                Rp {{ number_format($fee->amount, 0, ',', '.') }}</td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                {{ $fee->payment_method === 'cash' ? 'Tunai' : 'Transfer' }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                {{ $fee->receiver ? $fee->receiver->name : '-' }}
+                            </td>
+                            <td class="px-4 py-4">
+                                @if ($fee->status === 'paid')
+                                <span
+                                    class="px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
+                                    Lunas
+                                </span>
+                                @else
+                                <span
+                                    class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
+                                    Belum Lunas
+                                </span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-4">
+                                <button class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    @click="getFeeDetails({{ $fee->id }})">
+                                    <i data-feather="eye" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
+                                </button>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
-                                    Tidak ada data iuran
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
+                                Tidak ada data iuran
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -158,7 +162,7 @@
                     <li>Pilih metode pembayaran</li>
                     <li>Jika transfer, kirim ke rekening BCA 1452671451 a.n. Nur Hartanto</li>
                     <li>Jika tunai, nasabah hanya perlu memberikan uang kepada petugas</li>
-                    <li>Upload file foto bukti pembayaran (jika transfer)</li>
+                    <li>Upload file foto bukti pembayaran</li>
                     <li>Klik simpan</li>
                 </ol>
             </div>
