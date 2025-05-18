@@ -13,11 +13,22 @@ use Illuminate\Support\Facades\DB;
 
 class DepositController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $deposits = Deposit::with(['user', 'wasteType', 'receiver'])
-                      ->orderBy('deposit_date', 'desc')
-                      ->paginate(10);
+        $query = Deposit::with(['user', 'wasteType', 'receiver']);
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+            });
+        }
+
+        $deposits = $query->orderBy('deposit_date', 'desc')
+                      ->paginate(10)
+                      ->withQueryString();
 
         $nasabahUsers = User::where('role', 'nasabah')
                          ->where('status', 'active')
@@ -31,11 +42,22 @@ class DepositController extends Controller
         return view('pages.admin.setoran', compact('deposits', 'nasabahUsers', 'wasteTypes'));
     }
 
-    public function petugasIndex()
+    public function petugasIndex(Request $request)
     {
-        $deposits = Deposit::with(['user', 'wasteType', 'receiver'])
-                      ->orderBy('deposit_date', 'desc')
-                      ->paginate(10);
+        $query = Deposit::with(['user', 'wasteType', 'receiver']);
+
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('username', 'like', '%' . $search . '%')
+                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+            });
+        }
+
+        $deposits = $query->orderBy('deposit_date', 'desc')
+                      ->paginate(10)
+                      ->withQueryString();
 
         $nasabahUsers = User::where('role', 'nasabah')
                          ->where('status', 'active')
@@ -151,9 +173,51 @@ class DepositController extends Controller
         $totalWeight = $deposits->sum('weight_kg');
         $totalAmount = $deposits->sum('total_amount');
 
-        return view('pages.admin.reports.setoran-report', compact(
-            'deposits', 'startDate', 'endDate', 'totalWeight', 'totalAmount'
-        ));
+        $filename = 'laporan_setoran_' . date('Ymd_His') . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $callback = function() use ($deposits, $totalWeight, $totalAmount) {
+            $file = fopen('php://output', 'w');
+
+            fputs($file, "\xEF\xBB\xBF");
+
+            fputcsv($file, [
+                'No.',
+                'Tanggal',
+                'Nasabah',
+                'Jenis Sampah',
+                'Berat (KG)',
+                'Harga/KG',
+                'Total'
+            ]);
+
+            $counter = 1;
+            foreach ($deposits as $deposit) {
+                fputcsv($file, [
+                    $counter++,
+                    $deposit->deposit_date->format('d-m-Y'),
+                    $deposit->user->name,
+                    $deposit->wasteType->name,
+                    number_format($deposit->weight_kg, 2),
+                    number_format($deposit->price_per_kg, 0, ',', '.'),
+                    number_format($deposit->total_amount, 0, ',', '.')
+                ]);
+            }
+
+            fputcsv($file, ['']);
+            fputcsv($file, ['Total Berat', '', '', '', number_format($totalWeight, 2) . ' KG']);
+            fputcsv($file, ['Total Nilai', '', '', '', number_format($totalAmount, 0, ',', '.')]);
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     public function petugasGenerateReport(Request $request)
@@ -174,8 +238,55 @@ class DepositController extends Controller
         $totalWeight = $deposits->sum('weight_kg');
         $totalAmount = $deposits->sum('total_amount');
 
-        return view('pages.petugas.reports.setoran-report', compact(
-            'deposits', 'startDate', 'endDate', 'totalWeight', 'totalAmount'
-        ));
+        // Generate CSV export
+        $filename = 'laporan_setoran_' . date('Ymd_His') . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $callback = function() use ($deposits, $totalWeight, $totalAmount) {
+            $file = fopen('php://output', 'w');
+
+            // Add UTF-8 BOM to fix Excel encoding issues
+            fputs($file, "\xEF\xBB\xBF");
+
+            // CSV Header
+            fputcsv($file, [
+                'No.',
+                'Tanggal',
+                'Nasabah',
+                'Jenis Sampah',
+                'Berat (KG)',
+                'Harga/KG',
+                'Total'
+            ]);
+
+            // CSV Content
+            $counter = 1;
+            foreach ($deposits as $deposit) {
+                fputcsv($file, [
+                    $counter++,
+                    $deposit->deposit_date->format('d-m-Y'),
+                    $deposit->user->name,
+                    $deposit->wasteType->name,
+                    number_format($deposit->weight_kg, 2),
+                    number_format($deposit->price_per_kg, 0, ',', '.'),
+                    number_format($deposit->total_amount, 0, ',', '.')
+                ]);
+            }
+
+            // Add total row
+            fputcsv($file, ['']);
+            fputcsv($file, ['Total Berat', '', '', '', number_format($totalWeight, 2) . ' KG']);
+            fputcsv($file, ['Total Nilai', '', '', '', number_format($totalAmount, 0, ',', '.')]);
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }
