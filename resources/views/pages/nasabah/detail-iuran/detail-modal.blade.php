@@ -68,8 +68,12 @@
                                             Lunas
                                         </span>
                                         <span x-show="selectedFee.status === 'unpaid'"
+                                            class="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">
+                                            Menunggu
+                                        </span>
+                                        <span x-show="selectedFee.status === 'partial'"
                                             class="px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
-                                            Belum Lunas
+                                            Ditolak
                                         </span>
                                     </dd>
                                 </div>
