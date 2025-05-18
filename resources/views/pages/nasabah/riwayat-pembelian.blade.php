@@ -35,14 +35,16 @@
             <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Riwayat Pembelian</h2>
 
             <div class="mb-6">
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
+                <form action="{{ route('nasabah.riwayat.pembelian') }}" method="GET">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                        <input type="text" name="search"
+                            class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full pl-10 p-2.5 w-full md:w-80"
+                            placeholder="Cari riwayat..." value="{{ request('search') }}">
                     </div>
-                    <input type="text"
-                        class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-full pl-10 p-2.5 w-full md:w-80"
-                        placeholder="Cari riwayat...">
-                </div>
+                </form>
             </div>
 
             <div class="overflow-x-auto">
