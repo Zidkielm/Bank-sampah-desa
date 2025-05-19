@@ -27,6 +27,9 @@ Route::redirect('/', 'login');
 Route::get('/landing', function () {
     return view('pages.landing.index');
 })->name('landing');
+Route::get('/tata-cara', function () {
+    return view('pages.landing.tata-cara');
+})->name('tata-cara');
 
 // role admin
 Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->group(function () {

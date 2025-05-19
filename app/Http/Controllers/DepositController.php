@@ -19,25 +19,25 @@ class DepositController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->whereHas('user', function($q) use ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('username', 'like', '%' . $search . '%')
-                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+                    ->orWhere('username', 'like', '%' . $search . '%')
+                    ->orWhere('no_hp', 'like', '%' . $search . '%');
             });
         }
 
         $deposits = $query->orderBy('deposit_date', 'desc')
-                      ->paginate(10)
-                      ->withQueryString();
+            ->paginate(10)
+            ->withQueryString();
 
         $nasabahUsers = User::where('role', 'nasabah')
-                         ->where('status', 'active')
-                         ->orderBy('name')
-                         ->get();
+            ->where('status', 'active')
+            ->orderBy('name')
+            ->get();
 
         $wasteTypes = WasteType::where('status', 'active')
-                       ->orderBy('name')
-                       ->get();
+            ->orderBy('name')
+            ->get();
 
         return view('pages.admin.setoran', compact('deposits', 'nasabahUsers', 'wasteTypes'));
     }
@@ -48,25 +48,25 @@ class DepositController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->whereHas('user', function($q) use ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('username', 'like', '%' . $search . '%')
-                  ->orWhere('no_hp', 'like', '%' . $search . '%');
+                    ->orWhere('username', 'like', '%' . $search . '%')
+                    ->orWhere('no_hp', 'like', '%' . $search . '%');
             });
         }
 
         $deposits = $query->orderBy('deposit_date', 'desc')
-                      ->paginate(10)
-                      ->withQueryString();
+            ->paginate(10)
+            ->withQueryString();
 
         $nasabahUsers = User::where('role', 'nasabah')
-                         ->where('status', 'active')
-                         ->orderBy('name')
-                         ->get();
+            ->where('status', 'active')
+            ->orderBy('name')
+            ->get();
 
         $wasteTypes = WasteType::where('status', 'active')
-                       ->orderBy('name')
-                       ->get();
+            ->orderBy('name')
+            ->get();
 
         return view('pages.petugas.setoran', compact('deposits', 'nasabahUsers', 'wasteTypes'));
     }
@@ -140,7 +140,7 @@ class DepositController extends Controller
     public function show($id)
     {
         $deposit = Deposit::with(['user', 'wasteType', 'receiver', 'transaction'])
-                    ->findOrFail($id);
+            ->findOrFail($id);
 
         if (request()->ajax()) {
             return response()->json($deposit);
@@ -166,9 +166,9 @@ class DepositController extends Controller
         $endDate = $request->end_date;
 
         $deposits = Deposit::with(['user', 'wasteType', 'receiver'])
-                     ->whereBetween('deposit_date', [$startDate, $endDate])
-                     ->orderBy('deposit_date')
-                     ->get();
+            ->whereBetween('deposit_date', [$startDate, $endDate])
+            ->orderBy('deposit_date')
+            ->get();
 
         $totalWeight = $deposits->sum('weight_kg');
         $totalAmount = $deposits->sum('total_amount');
@@ -182,7 +182,7 @@ class DepositController extends Controller
             'Expires' => '0'
         ];
 
-        $callback = function() use ($deposits, $totalWeight, $totalAmount) {
+        $callback = function () use ($deposits, $totalWeight, $totalAmount) {
             $file = fopen('php://output', 'w');
 
             fputs($file, "\xEF\xBB\xBF");
@@ -231,9 +231,9 @@ class DepositController extends Controller
         $endDate = $request->end_date;
 
         $deposits = Deposit::with(['user', 'wasteType', 'receiver'])
-                     ->whereBetween('deposit_date', [$startDate, $endDate])
-                     ->orderBy('deposit_date')
-                     ->get();
+            ->whereBetween('deposit_date', [$startDate, $endDate])
+            ->orderBy('deposit_date')
+            ->get();
 
         $totalWeight = $deposits->sum('weight_kg');
         $totalAmount = $deposits->sum('total_amount');
@@ -248,7 +248,7 @@ class DepositController extends Controller
             'Expires' => '0'
         ];
 
-        $callback = function() use ($deposits, $totalWeight, $totalAmount) {
+        $callback = function () use ($deposits, $totalWeight, $totalAmount) {
             $file = fopen('php://output', 'w');
 
             // Add UTF-8 BOM to fix Excel encoding issues
@@ -281,12 +281,29 @@ class DepositController extends Controller
 
             // Add total row
             fputcsv($file, ['']);
-            fputcsv($file, ['Total Berat', '', '', '', number_format($totalWeight, 2) . ' KG']);
-            fputcsv($file, ['Total Nilai', '', '', '', number_format($totalAmount, 0, ',', '.')]);
+            fputcsv($file, [
+                '',
+                '',
+                '',
+                'TOTAL BERAT',
+                number_format($totalWeight, 2, ',', '.') . ' KG',
+                '',
+                ''
+            ]);
+            fputcsv($file, [
+                '',
+                '',
+                '',
+                'TOTAL NILAI',
+                number_format($totalAmount, 0, ',', '.'),
+                '',
+                ''
+            ]);
+            fputcsv($file, ['']); // pemisah visual di akhir
 
             fclose($file);
         };
 
         return response()->stream($callback, 200, $headers);
     }
-}
+} 
