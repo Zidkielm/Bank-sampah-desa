@@ -103,4 +103,41 @@ class User extends Authenticatable
     {
         return $this->hasMany(MonthlyFee::class, 'receiver_id');
     }
+
+    /**
+     * Boot the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            $user->deposits()->each(function ($deposit) {
+                $deposit->delete();
+            });
+            $user->withdrawals()->each(function ($withdrawal) {
+                $withdrawal->delete();
+            });
+            $user->monthlyFees()->each(function ($monthlyFee) {
+                $monthlyFee->delete();
+            });
+            if ($user->balance) {
+                $user->balance->delete();
+            }
+            $user->transactions()->each(function ($transaction) {
+                $transaction->delete();
+            });
+            $user->receivedDeposits()->each(function ($receivedDeposit) {
+                $receivedDeposit->delete();
+            });
+            $user->processedWithdrawals()->each(function ($processedWithdrawal) {
+                $processedWithdrawal->delete();
+            });
+            $user->receivedMonthlyFees()->each(function ($receivedMonthlyFee) {
+                $receivedMonthlyFee->delete();
+            });
+        });
+    }
 }
