@@ -88,7 +88,7 @@ Route::middleware(['auth:sanctum', 'verified', 'role:petugas'])->group(function 
     Route::post('petugas/dashboard/setoran/report', [DepositController::class, 'petugasGenerateReport'])->name('petugas.deposit.report');
 
     Route::get('/petugas/dashboard/iuran', [MonthlyFeeController::class, 'petugasIndex'])->name('petugas.iuran');
-    Route::post('/petugas/dashboard/iuran', [MonthlyFeeController::class, 'store'])->name('petugas.monthly-fee.store');
+    Route::post('/petugas/dashboard/iuran', [MonthlyFeeController::class, 'petugasStore'])->name('petugas.monthly-fee.store');
     Route::get('/petugas/dashboard/iuran/check-unpaid', [MonthlyFeeController::class, 'checkUnpaidUsers'])->name('petugas.monthly-fee.check-unpaid');
     Route::get('/petugas/dashboard/iuran/{id}', [MonthlyFeeController::class, 'show'])->name('petugas.monthly-fee.show');
 

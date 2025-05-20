@@ -26,21 +26,21 @@
         }
     }">
         @if (session('success'))
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
-            <div class="flex">
-                <div class="py-1"><i data-feather="check-circle" class="h-5 w-5 text-green-500 mr-3"></i></div>
-                <div>{{ session('success') }}</div>
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+                <div class="flex">
+                    <div class="py-1"><i data-feather="check-circle" class="h-5 w-5 text-green-500 mr-3"></i></div>
+                    <div>{{ session('success') }}</div>
+                </div>
             </div>
-        </div>
         @endif
 
         @if (session('error'))
-        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
-            <div class="flex">
-                <div class="py-1"><i data-feather="alert-circle" class="h-5 w-5 text-red-500 mr-3"></i></div>
-                <div>{{ session('error') }}</div>
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+                <div class="flex">
+                    <div class="py-1"><i data-feather="alert-circle" class="h-5 w-5 text-red-500 mr-3"></i></div>
+                    <div>{{ session('error') }}</div>
+                </div>
             </div>
-        </div>
         @endif
 
         <div class="flex justify-between items-center mb-6">
@@ -61,7 +61,8 @@
             <form action="{{ route('iuran') }}" method="GET">
                 <div class="flex flex-col md:flex-row md:justify-between gap-4 mb-6">
                     <div class="w-full md:w-1/2">
-                        <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Nasabah</label>
+                        <label for="search"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Nasabah</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
@@ -73,13 +74,15 @@
                     </div>
                     <div class="w-full md:w-1/2 flex flex-col md:flex-row md:justify-end gap-4">
                         <div class="w-full md:w-2/3">
-                            <label for="month" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bulan</label>
+                            <label for="month"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bulan</label>
                             <input type="month" name="month" id="month"
                                 class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg p-2.5 w-full"
                                 value="{{ request('month', date('Y-m')) }}">
                         </div>
                         <div class="flex items-end">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors">
                                 <i data-feather="filter" class="h-4 w-4 inline-block mr-1"></i> Filter
                             </button>
                         </div>
@@ -103,58 +106,58 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                         @forelse($monthlyFees as $index => $fee)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                {{ $monthlyFees->firstItem() + $index }}
-                            </td>
-                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $fee->user->name }}</td>
-                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                {{ $fee->payment_date ? $fee->payment_date->format('d-m-Y') : '-' }}
-                            </td>
-                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                Rp {{ number_format($fee->amount, 0, ',', '.') }}</td>
-                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                {{ $fee->payment_method === 'cash' ? 'Tunai' : 'Transfer' }}
-                            </td>
-                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                {{ $fee->receiver ? $fee->receiver->name : '-' }}
-                            </td>
-                            <td class="px-4 py-4">
-                                @if ($fee->status === 'paid')
-                                <span
-                                    class="px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
-                                    Lunas
-                                </span>
-                                @elseif ($fee->status === 'pending')
-                                <span
-                                    class="px-3 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">
-                                    Menunggu
-                                </span>
-                                @elseif ($fee->status === 'partial')
-                                <span
-                                    class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
-                                    Ditolak
-                                </span>
-                                @else
-                                <span
-                                    class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
-                                    Belum Lunas
-                                </span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-4">
-                                <button class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    @click="getFeeDetails({{ $fee->id }})">
-                                    <i data-feather="eye" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
-                                </button>
-                            </td>
-                        </tr>
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                    {{ $monthlyFees->firstItem() + $index }}
+                                </td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $fee->user->name }}</td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                    {{ $fee->payment_date ? $fee->payment_date->format('d-m-Y') : '-' }}
+                                </td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                    Rp {{ number_format($fee->amount, 0, ',', '.') }}</td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                    {{ $fee->payment_method === 'cash' ? 'Tunai' : 'Transfer' }}
+                                </td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                    {{ $fee->receiver ? $fee->receiver->name : '-' }}
+                                </td>
+                                <td class="px-4 py-4">
+                                    @if ($fee->status === 'paid')
+                                        <span
+                                            class="px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
+                                            Lunas
+                                        </span>
+                                    @elseif ($fee->status === 'pending')
+                                        <span
+                                            class="px-3 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">
+                                            Menunggu
+                                        </span>
+                                    @elseif ($fee->status === 'partial')
+                                        <span
+                                            class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
+                                            Ditolak
+                                        </span>
+                                    @else
+                                        <span
+                                            class="px-3 py-1 text-xs font-medium text-orange-800 bg-orange-100 rounded-full">
+                                            Menunggu
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-4">
+                                    <button class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        @click="getFeeDetails({{ $fee->id }})">
+                                        <i data-feather="eye" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
-                                Tidak ada data iuran
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
+                                    Tidak ada data iuran
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>

@@ -126,8 +126,8 @@
                                         </span>
                                     @else
                                         <span
-                                            class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
-                                            Belum Lunas
+                                            class="px-3 py-1 text-xs font-medium text-orange-800 bg-orange-100 rounded-full">
+                                            Menunggu
                                         </span>
                                     @endif
                                 </td>
