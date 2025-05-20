@@ -26,7 +26,6 @@ class MonthlyFeeController extends Controller
             });
         }
 
-        // Apply month filter - simple implementation
         if ($request->has('month') && $request->month != '') {
             $monthYear = explode('-', $request->month);
             if (count($monthYear) === 2) {
@@ -38,6 +37,7 @@ class MonthlyFeeController extends Controller
         }
 
         $monthlyFees = $query->orderBy('payment_date', 'desc')
+                            ->orderBy('updated_at', 'desc')
                             ->paginate(10)
                             ->withQueryString();
 
@@ -74,6 +74,7 @@ class MonthlyFeeController extends Controller
         }
 
         $monthlyFees = $query->orderBy('payment_date', 'desc')
+                            ->orderBy('updated_at', 'desc')
                             ->paginate(10)
                             ->withQueryString();
 
@@ -111,8 +112,9 @@ class MonthlyFeeController extends Controller
         }
 
         $monthlyFees = $query->orderBy('payment_date', 'desc')
-                            ->paginate(10)
-                            ->withQueryString();
+                    ->orderBy('updated_at', 'desc')
+                    ->paginate(10)
+                    ->withQueryString();
 
         return view('pages.nasabah.iuran', compact('monthlyFees'));
     }
@@ -265,6 +267,7 @@ class MonthlyFeeController extends Controller
             }
 
             $monthlyFee->status = 'paid';
+            $monthlyFee->receiver_id = Auth::id();
             $monthlyFee->save();
 
             $user = User::find($monthlyFee->user_id);
@@ -291,6 +294,8 @@ class MonthlyFeeController extends Controller
                         'balance_after' => $newBalance,
                         'description' => 'Pembayaran iuran bulanan pada ' . $monthlyFee->payment_date->format('d-m-Y'),
                     ]);
+
+
                 } else {
                     DB::rollBack();
                     return redirect()->back()->with('error', 'Saldo nasabah tidak mencukupi untuk pembayaran iuran');

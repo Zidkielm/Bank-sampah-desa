@@ -96,7 +96,7 @@
                             <th class="px-4 py-3">Tgl. Pembayaran</th>
                             <th class="px-4 py-3">Jumlah</th>
                             <th class="px-4 py-3">Metode</th>
-                            <th class="px-4 py-3">Pengirim</th>
+                            <th class="px-4 py-3">Penerima</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3 rounded-r-lg">Action</th>
                         </tr>
