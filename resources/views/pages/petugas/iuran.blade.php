@@ -46,10 +46,6 @@
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Iuran Bulanan</h1>
             <div class="flex space-x-2">
-                <a href="{{ route('petugas.monthly-fee.check-unpaid') }}"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                    <i data-feather="user-check" class="h-4 w-4 inline-block mr-1"></i> Cek Yang Belum Bayar
-                </a>
                 <button @click="showAddModal = true"
                     class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                     <i data-feather="plus" class="h-4 w-4 inline-block mr-1"></i> Tambah Iuran
