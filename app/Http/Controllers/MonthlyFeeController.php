@@ -310,7 +310,7 @@ class MonthlyFeeController extends Controller
         $request->validate([
             'rejection_reason' => 'required|string|max:255',
         ]);
-        
+
         DB::beginTransaction();
         try {
             $monthlyFee = MonthlyFee::findOrFail($id);
