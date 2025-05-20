@@ -47,7 +47,8 @@ class DashboardController extends Controller
                     'totalSaldoUser',
                     'statusAkun',
                     'totalSetoranUser',
-                    'totalPenarikanUser'
+                    'totalPenarikanUser',
+                    'user'
                 ));
             }
         }
