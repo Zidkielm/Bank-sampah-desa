@@ -305,8 +305,12 @@ class MonthlyFeeController extends Controller
         }
     }
 
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:255',
+        ]);
+        
         DB::beginTransaction();
         try {
             $monthlyFee = MonthlyFee::findOrFail($id);
@@ -320,6 +324,7 @@ class MonthlyFeeController extends Controller
             }
 
             $monthlyFee->status = 'partial';
+            $monthlyFee->rejection_reason = $request->rejection_reason;
             $monthlyFee->save();
 
             DB::commit();

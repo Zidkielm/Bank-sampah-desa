@@ -18,6 +18,7 @@ class MonthlyFee extends Model
         'status',
         'proof_image',
         'notes',
+        'rejection_reason',
     ];
 
     protected $casts = [

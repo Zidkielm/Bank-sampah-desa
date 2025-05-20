@@ -78,6 +78,11 @@
                                     </dd>
                                 </div>
 
+                                <div x-show="selectedFee.status === 'partial'" class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Alasan Penolakan</dt>
+                                    <dd class="text-sm text-red-600 dark:text-red-400 col-span-2" x-text="selectedFee.rejection_reason || '-'"></dd>
+                                </div>
+
                                 <div class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Penerima</dt>
                                     <dd class="text-sm text-gray-900 dark:text-gray-200 col-span-2"
@@ -124,16 +129,14 @@
                         </button>
                     </form>
 
-                    <form x-show="selectedFee.status === 'unpaid'" action="{{ route('petugas.monthly-fee.reject', '') }}" method="POST" class="inline" x-ref="rejectForm">
-                        @csrf
-                        <button type="button" @click="$refs.rejectForm.action = '{{ route('petugas.monthly-fee.reject', '') }}/' + selectedFee.id; $refs.rejectForm.submit();"
-                            class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2
-                            bg-red-500 text-base font-medium text-white hover:bg-red-600
-                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-                            dark:focus:ring-offset-gray-800 sm:w-auto sm:text-sm">
-                            Tolak
-                        </button>
-                    </form>
+                    <button x-show="selectedFee.status === 'unpaid'" type="button" 
+                        @click="showDetailModal = false; showRejectModal = true; rejectFormAction = '{{ route('petugas.monthly-fee.reject', '') }}/' + selectedFee.id;"
+                        class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2
+                        bg-red-500 text-base font-medium text-white hover:bg-red-600
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+                        dark:focus:ring-offset-gray-800 sm:w-auto sm:text-sm">
+                        Tolak
+                    </button>
                 </div>
 
                 <button type="button" @click="showDetailModal = false"

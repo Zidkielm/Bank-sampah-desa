@@ -78,6 +78,11 @@
                                     </dd>
                                 </div>
 
+                                <div x-show="selectedFee.status === 'partial'" class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Alasan Penolakan</dt>
+                                    <dd class="text-sm text-red-600 dark:text-red-400 col-span-2" x-text="selectedFee.rejection_reason || '-'"></dd>
+                                </div>
+
                                 <div class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Penerima</dt>
                                     <dd class="text-sm text-gray-900 dark:text-gray-200 col-span-2"

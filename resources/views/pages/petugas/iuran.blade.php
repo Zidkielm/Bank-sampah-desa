@@ -2,7 +2,9 @@
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto" x-data="{
         showAddModal: false,
         showDetailModal: false,
+        showRejectModal: false,
         selectedFee: {},
+        rejectFormAction: '',
         paymentMethod: '',
         formatPrice(price) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price);
@@ -45,7 +47,7 @@
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Iuran Bulanan</h1>
             <div class="flex space-x-2">
                 <a href="{{ route('petugas.monthly-fee.check-unpaid') }}"
-                   class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                     <i data-feather="user-check" class="h-4 w-4 inline-block mr-1"></i> Cek Yang Belum Bayar
                 </a>
                 <button @click="showAddModal = true"
@@ -59,7 +61,8 @@
             <form action="{{ route('petugas.iuran') }}" method="GET">
                 <div class="flex flex-col md:flex-row md:justify-between gap-4 mb-6">
                     <div class="w-full md:w-1/2">
-                        <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Nasabah</label>
+                        <label for="search"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cari Nasabah</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
@@ -71,13 +74,15 @@
                     </div>
                     <div class="w-full md:w-1/2 flex flex-col md:flex-row md:justify-end gap-4">
                         <div class="w-full md:w-2/3">
-                            <label for="month" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bulan</label>
+                            <label for="month"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bulan</label>
                             <input type="month" name="month" id="month"
                                 class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-lg p-2.5 w-full"
                                 value="{{ request('month', date('Y-m')) }}">
                         </div>
                         <div class="flex items-end">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors">
                                 <i data-feather="filter" class="h-4 w-4 inline-block mr-1"></i> Filter
                             </button>
                         </div>
@@ -118,6 +123,11 @@
                                         <span
                                             class="px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
                                             Lunas
+                                        </span>
+                                    @elseif ($fee->status === 'partial')
+                                        <span
+                                            class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
+                                            Ditolak
                                         </span>
                                     @else
                                         <span
@@ -184,5 +194,6 @@
 
         @include('pages.petugas.detail-iuran.detail-modal')
         @include('pages.petugas.detail-iuran.add-modal')
+        @include('pages.petugas.detail-iuran.rejection-modal')
     </div>
 </x-app-layout>
