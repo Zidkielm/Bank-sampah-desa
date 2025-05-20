@@ -33,11 +33,23 @@
     </form>
     <x-validation-errors class="mt-4" />
     <!-- Footer -->
+
+    <!-- Tombol Kembali ke Landing Page -->
+    <div class="mt-2">
+        <a href="{{ url('/landing') }}"
+            class="inline-flex items-center text-sm font-medium text-gray-600 transition-colors hover:text-violet-600 dark:text-gray-300 dark:hover:text-violet-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class=" h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            {{ __('Kembali ke Beranda') }}
+        </a>
+    </div>
     <div class="mt-6 border-t border-gray-100 pt-5 dark:border-gray-700/60">
         <div class="text-sm">
-            {{ __('Don\'t you have an account?') }} <a
+            {{ __('Belum punya akun?') }} <a
                 class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400"
-                href="{{ route('register') }}">{{ __('Sign Up') }}</a>
+                href="{{ route('register') }}">{{ __('Daftar Sekarang') }}</a>
         </div>
     </div>
 </x-authentication-layout>
