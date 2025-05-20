@@ -126,7 +126,7 @@ class MonthlyFeeController extends Controller
             'payment_date' => 'required|date',
             'amount' => 'required|numeric|min:1000',
             'payment_method' => 'required|in:cash,transfer',
-            'proof_image' => $request->payment_method == 'transfer' ? 'required|image|max:2048' : 'nullable|image|max:2048',
+            'proof_image' => $request->payment_method == 'transfer' ? 'required|image|max:2048' : 'required|image|max:2048',
             'notes' => 'nullable|string',
         ]);
 
@@ -205,13 +205,67 @@ class MonthlyFeeController extends Controller
         }
     }
 
+    public function petugasStore(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'payment_date' => 'required|date',
+            'amount' => 'required|numeric|min:1000',
+            'payment_method' => 'required|in:cash,transfer',
+            'proof_image' => $request->payment_method == 'transfer' ? 'required|image|max:2048' : 'required|image|max:2048',
+            'notes' => 'nullable|string',
+        ]);
+
+        $paymentDate = Carbon::parse($request->payment_date);
+        $monthYear = $paymentDate->format('Y-m');
+
+        $existingPayment = MonthlyFee::where('user_id', $request->user_id)
+            ->whereYear('payment_date', $paymentDate->year)
+            ->whereMonth('payment_date', $paymentDate->month)
+            ->where('status', 'paid')
+            ->exists();
+
+        if ($existingPayment) {
+            $monthName = $paymentDate->locale('id')->monthName;
+            return redirect()->back()->with('error', "Tidak dapat membayar iuran karena nasabah sudah membayar untuk bulan {$monthName} {$paymentDate->year}.");
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $imagePath = null;
+            if ($request->hasFile('proof_image')) {
+                $imagePath = $request->file('proof_image')->store('monthly-fees', 'public');
+            }
+
+            $status = Auth::user()->role === 'nasabah' ? 'unpaid' : 'paid';
+
+            MonthlyFee::create([
+                'user_id' => $request->user_id,
+                'receiver_id' => Auth::id(),
+                'payment_date' => $request->payment_date,
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'status' => 'unpaid',
+                'proof_image' => $imagePath,
+                'notes' => $request->notes,
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Pembayaran iuran berhasil disimpan' . ($status === 'unpaid' ? ' dan menunggu persetujuan admin' : ''));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menyimpan pembayaran iuran: ' . $e->getMessage());
+        }
+    }
+
     public function nasabahStore(Request $request)
     {
         $request->validate([
             'payment_date' => 'required|date',
             'amount' => 'required|numeric|min:1000',
             'payment_method' => 'required|in:cash,transfer',
-            'proof_image' => $request->payment_method == 'transfer' ? 'required|image|max:2048' : 'nullable|image|max:2048',
+            'proof_image' => $request->payment_method == 'transfer' ? 'required|image|max:2048' : 'required|image|max:2048',
             'notes' => 'nullable|string',
         ]);
 
@@ -237,7 +291,7 @@ class MonthlyFeeController extends Controller
                 $imagePath = $request->file('proof_image')->store('monthly-fees', 'public');
             }
 
-            $monthlyFee = MonthlyFee::create([
+            MonthlyFee::create([
                 'user_id' => Auth::id(),
                 'receiver_id' => Auth::id(),
                 'payment_date' => $request->payment_date,

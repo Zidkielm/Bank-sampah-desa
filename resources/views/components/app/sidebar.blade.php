@@ -164,7 +164,7 @@
                             </div>
                         </a>
                     </li>
-
+                    @if($user->status === 'active')
                     {{-- Riwayat dropdown --}}
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-linear-to-r @if(request()->routeIs('nasabah.riwayat.*')){{ 'from-orange-500/[0.12] dark:from-orange-500/[0.24] to-orange-500/[0.04]' }}@endif" x-data="{ open: {{ request()->routeIs('nasabah.riwayat.*') ? 1 : 0 }} }">
                         <a class="block text-gray-800 dark:text-gray-100 truncate transition @if(!request()->routeIs('nasabah.riwayat.*')){{ 'hover:text-gray-900 dark:hover:text-white' }}@endif" href="#0" @click.prevent="open = !open; sidebarExpanded = true">
@@ -196,6 +196,7 @@
                             </ul>
                         </div>
                     </li>
+                    @endif
                     @endif
                 </ul>
             </div>
