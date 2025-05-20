@@ -2,7 +2,9 @@
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto" x-data="{
         showAddModal: false,
         showDetailModal: false,
+        showRejectModal: false,
         selectedFee: {},
+        rejectFormAction: '',
         paymentMethod: '',
         formatPrice(price) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price);
@@ -128,7 +130,7 @@
                                     class="px-3 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">
                                     Menunggu
                                 </span>
-                                @elseif ($fee->status === 'rejected')
+                                @elseif ($fee->status === 'partial')
                                 <span
                                     class="px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
                                     Ditolak
@@ -198,5 +200,6 @@
 
         @include('pages.admin.detail-iuran.detail-modal')
         @include('pages.admin.detail-iuran.add-modal')
+        @include('pages.admin.detail-iuran.rejection-modal')
     </div>
 </x-app-layout>
