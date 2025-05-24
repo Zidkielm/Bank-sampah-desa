@@ -22,7 +22,7 @@ use App\Http\Controllers\NasabahHistoryController;
 |
 */
 
-Route::redirect('/', 'login');
+Route::redirect('/', 'landing');
 
 Route::get('/landing', function () {
     return view('pages.landing.index');
