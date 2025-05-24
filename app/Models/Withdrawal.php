@@ -61,4 +61,18 @@ class Withdrawal extends Model
     {
         return $this->hasMany(WithdrawalItem::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($withdrawal) {
+            $withdrawal->items()->each(function ($item) {
+                $item->delete();
+            });
+            if ($withdrawal->transaction) {
+                $withdrawal->transaction->delete();
+            }
+        });
+    }
 }

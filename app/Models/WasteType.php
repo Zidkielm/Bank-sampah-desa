@@ -17,6 +17,23 @@ class WasteType extends Model
         'status'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($wasteType) {
+            if ($wasteType->image_path) {
+                $imagePath = public_path('storage/' . $wasteType->image_path);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+            $wasteType->deposits()->each(function ($deposit) {
+                $deposit->delete();
+            });
+        });
+    }
+
     public function deposits()
     {
         return $this->hasMany(Deposit::class);
