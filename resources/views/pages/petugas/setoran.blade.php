@@ -72,10 +72,10 @@
         @endif
 
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Setoran</h1>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Pengambilan</h1>
             <button @click="showModal = true"
                 class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                Tambah Setoran
+                Tambah Pengambilan
             </button>
         </div>
 
@@ -98,7 +98,7 @@
                     <thead>
                         <tr class="bg-gray-100 dark:bg-gray-700 text-left text-gray-600 dark:text-gray-300">
                             <th class="px-4 py-3 rounded-l-lg">No.</th>
-                            <th class="px-4 py-3">Tgl. Setoran</th>
+                            <th class="px-4 py-3">Tgl. Pengambilan</th>
                             <th class="px-4 py-3">Nama Nasabah</th>
                             <th class="px-4 py-3">Jenis Sampah</th>
                             <th class="px-4 py-3">Berat (KG)</th>
@@ -133,7 +133,7 @@
                         @empty
                             <tr>
                                 <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Tidak
-                                    ada data setoran</td>
+                                    ada data Pengambilan</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -163,7 +163,7 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Export laporan setoran sampah</h2>
+            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Export laporan Pengambilan sampah</h2>
 
             <form action="{{ route('petugas.deposit.report') }}" method="POST">
                 @csrf

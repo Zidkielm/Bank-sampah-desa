@@ -21,7 +21,7 @@
                         <div class="w-full">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Tambah
-                                    Penarikan</h3>
+                                    Pembelian</h3>
                                 <button type="button" @click="showModal = false"
                                     class="text-gray-400 hover:text-gray-500 focus:outline-none">
                                     <i data-feather="x" class="h-6 w-6"></i>
@@ -55,7 +55,7 @@
 
                             <div class="mb-4">
                                 <label for="withdrawal_date"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal Penarikan
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal Pembelian
                                     <span class="text-red-500">*</span></label>
                                 <input type="date" id="withdrawal_date" name="withdrawal_date" required
                                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600

@@ -54,28 +54,28 @@
         }
     }">
         @if (session('success'))
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
-                <div class="flex">
-                    <div class="py-1"><i data-feather="check-circle" class="h-5 w-5 text-green-500 mr-3"></i></div>
-                    <div>{{ session('success') }}</div>
-                </div>
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+            <div class="flex">
+                <div class="py-1"><i data-feather="check-circle" class="h-5 w-5 text-green-500 mr-3"></i></div>
+                <div>{{ session('success') }}</div>
             </div>
+        </div>
         @endif
 
         @if (session('error'))
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
-                <div class="flex">
-                    <div class="py-1"><i data-feather="alert-circle" class="h-5 w-5 text-red-500 mr-3"></i></div>
-                    <div>{{ session('error') }}</div>
-                </div>
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+            <div class="flex">
+                <div class="py-1"><i data-feather="alert-circle" class="h-5 w-5 text-red-500 mr-3"></i></div>
+                <div>{{ session('error') }}</div>
             </div>
+        </div>
         @endif
 
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Setoran</h1>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Pengambilan</h1>
             <button @click="showModal = true"
                 class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                Tambah Setoran
+                Tambah Pengambilan
             </button>
         </div>
 
@@ -98,7 +98,7 @@
                     <thead>
                         <tr class="bg-gray-100 dark:bg-gray-700 text-left text-gray-600 dark:text-gray-300">
                             <th class="px-4 py-3 rounded-l-lg">No.</th>
-                            <th class="px-4 py-3">Tgl. Setoran</th>
+                            <th class="px-4 py-3">Tgl. Pengambilan</th>
                             <th class="px-4 py-3">Nama Nasabah</th>
                             <th class="px-4 py-3">Jenis Sampah</th>
                             <th class="px-4 py-3">Berat (KG)</th>
@@ -109,32 +109,34 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                         @forelse($deposits as $index => $deposit)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ $deposits->firstItem() + $index }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ $deposit->deposit_date->format('d-m-Y') }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->user->name }}</td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->wasteType->name }}
-                                </td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->formatted_weight }}
-                                </td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->formatted_total }}
-                                </td>
-                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->receiver->name }}
-                                </td>
-                                <td class="px-4 py-4">
-                                    <button class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                                        @click="getDepositDetails({{ $deposit->id }})">
-                                        <i data-feather="eye" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                {{ $deposits->firstItem() + $index }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
+                                {{ $deposit->deposit_date->format('d-m-Y') }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->user->name }}</td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->wasteType->name }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->formatted_weight }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->formatted_total }}
+                            </td>
+                            <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $deposit->receiver->name }}
+                            </td>
+                            <td class="px-4 py-4">
+                                <button class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    @click="getDepositDetails({{ $deposit->id }})">
+                                    <i data-feather="eye" class="h-5 w-5 text-gray-500 dark:text-gray-400"></i>
+                                </button>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Tidak
-                                    ada data setoran</td>
-                            </tr>
+                        <tr>
+                            <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Tidak
+                                ada data Pengambilan</td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -163,7 +165,7 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Export laporan setoran sampah</h2>
+            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Export laporan Pengambilan sampah</h2>
 
             <form action="{{ route('deposit.report') }}" method="POST">
                 @csrf

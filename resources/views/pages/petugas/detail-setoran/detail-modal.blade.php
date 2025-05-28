@@ -18,7 +18,7 @@
                 <div class="sm:flex sm:items-start">
                     <div class="w-full">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Detail Setoran
+                            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Detail Pengambilan
                             </h3>
                             <button @click="showDetailModal = false"
                                 class="text-gray-400 hover:text-gray-500 focus:outline-none">
@@ -29,10 +29,10 @@
                         <div class="border-t border-gray-200 dark:border-gray-700 py-4">
                             <dl>
                                 <div class="grid grid-cols-3 gap-4 py-3">
-                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Setoran
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Pengambilan
                                     </dt>
                                     <dd class="text-sm text-gray-900 dark:text-gray-200 col-span-2"
-                                        x-text="selectedDeposit.deposit_date"></dd>
+                                        x-text="selectedDeposit.deposit_date.split('T')[0]"></dd>
                                 </div>
 
                                 <div class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">

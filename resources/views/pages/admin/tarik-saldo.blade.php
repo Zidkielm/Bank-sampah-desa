@@ -87,10 +87,10 @@
         @endif
 
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tarik Saldo</h1>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Pembelian</h1>
             <button @click="showModal = true"
                 class="bg-orange-400 hover:bg-orange-500 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                Tambah Penarikan
+                Tambah Pembelian
             </button>
         </div>
 
@@ -113,7 +113,7 @@
                     <thead>
                         <tr class="bg-gray-100 dark:bg-gray-700 text-left text-gray-600 dark:text-gray-300">
                             <th class="px-4 py-3 rounded-l-lg">No.</th>
-                            <th class="px-4 py-3">Tgl. Penarikan</th>
+                            <th class="px-4 py-3">Tgl. Pembelian</th>
                             <th class="px-4 py-3">Nama Nasabah</th>
                             <th class="px-4 py-3">Total Belanja</th>
                             <th class="px-4 py-3">Dari Saldo</th>
@@ -150,7 +150,7 @@
                         @empty
                             <tr>
                                 <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">Tidak
-                                    ada data penarikan</td>
+                                    ada data pembelian</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -180,7 +180,7 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Export laporan penarikan</h2>
+            <h2 class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">Export laporan pembelian</h2>
 
             <form action="{{ route('withdrawal.report') }}" method="POST">
                 @csrf

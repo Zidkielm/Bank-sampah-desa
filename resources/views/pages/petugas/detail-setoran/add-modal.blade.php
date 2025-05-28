@@ -21,7 +21,7 @@
                         <div class="w-full">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Tambah
-                                    Setoran</h3>
+                                    Pengambilan</h3>
                                 <button type="button" @click="showModal = false"
                                     class="text-gray-400 hover:text-gray-500 focus:outline-none">
                                     <i data-feather="x" class="h-6 w-6"></i>
@@ -45,7 +45,7 @@
 
                             <div class="mb-4">
                                 <label for="deposit_date"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal Setoran
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal Pengambilan
                                     <span class="text-red-500">*</span></label>
                                 <input type="date" id="deposit_date" name="deposit_date" required
                                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600
@@ -147,7 +147,7 @@
                                 <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Total
-                                            Setoran</span>
+                                            Pengambilan</span>
                                         <span x-text="formatPrice(calculateGrandTotal())"
                                             class="text-lg font-semibold text-gray-800 dark:text-gray-100"></span>
                                     </div>
