@@ -36,6 +36,12 @@
                                 </div>
 
                                 <div class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">ID Nasabah</dt>
+                                    <dd class="text-sm text-gray-900 dark:text-gray-200 col-span-2"
+                                        x-text="selectedDeposit.user?.id"></dd>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Nama Nasabah</dt>
                                     <dd class="text-sm text-gray-900 dark:text-gray-200 col-span-2"
                                         x-text="selectedDeposit.user?.name"></dd>
