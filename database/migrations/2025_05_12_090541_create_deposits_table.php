@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('deposits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('user_id', 20);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('waste_type_id')->constrained()->onDelete('restrict');
-            $table->foreignId('receiver_id')->constrained('users')->onDelete('restrict');
+            $table->string('receiver_id', 20);
+            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('restrict');
             $table->date('deposit_date');
             $table->decimal('weight_kg', 15, 2);
             $table->decimal('price_per_kg', 15, 2);
