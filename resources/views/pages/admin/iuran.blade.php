@@ -95,6 +95,7 @@
                     <thead>
                         <tr class="bg-gray-100 dark:bg-gray-700 text-left text-gray-600 dark:text-gray-300">
                             <th class="px-4 py-3 rounded-l-lg">No.</th>
+                            <th class="px-4 py-3">ID Nasabah</th>
                             <th class="px-4 py-3">Nama Nasabah</th>
                             <th class="px-4 py-3">Tgl. Pembayaran</th>
                             <th class="px-4 py-3">Jumlah</th>
@@ -110,6 +111,7 @@
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
                                     {{ $monthlyFees->firstItem() + $index }}
                                 </td>
+                                <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $fee->user->id }}</td>
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $fee->user->name }}</td>
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
                                     {{ $fee->payment_date ? $fee->payment_date->format('d-m-Y') : '-' }}
@@ -154,7 +156,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
+                                <td colspan="9" class="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
                                     Tidak ada data iuran
                                 </td>
                             </tr>
