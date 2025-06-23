@@ -41,7 +41,7 @@
                 <table class="w-full">
                     <thead>
                         <tr class="bg-gray-100 dark:bg-gray-700 text-left text-gray-600 dark:text-gray-300">
-                            <th class="px-4 py-3 rounded-l-lg">No.</th>
+                            <th class="px-4 py-3 rounded-l-lg">ID</th>
                             <th class="px-4 py-3">Nama nasabah</th>
                             <th class="px-4 py-3">Alamat</th>
                             <th class="px-4 py-3">Saldo</th>
@@ -53,7 +53,8 @@
                         @forelse($nasabah as $index => $user)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
-                                    {{ $nasabah->firstItem() + $index }}</td>
+                                    {{ $user->id }}
+                                </td>
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">{{ $user->name }}</td>
                                 <td class="px-4 py-4 text-gray-800 dark:text-gray-300">
                                     {{ $user->alamat ?? 'Tidak ada alamat' }}</td>
