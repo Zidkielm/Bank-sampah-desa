@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('processed_by')->constrained('users')->onDelete('restrict');
+            $table->string('user_id', 20);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('processed_by', 20);
+            $table->foreign('processed_by')->references('id')->on('users')->onDelete('restrict');
             $table->date('withdrawal_date');
             $table->decimal('amount', 15, 2);
             $table->text('notes')->nullable();

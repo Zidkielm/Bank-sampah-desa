@@ -32,7 +32,17 @@
                                     <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Pembayaran
                                     </dt>
                                     <dd class="text-sm text-gray-900 dark:text-gray-200 col-span-2"
-                                        x-text="selectedFee.payment_date"></dd>
+                                        x-text="selectedFee.payment_date ? new Date(selectedFee.payment_date).toLocaleDateString('id-ID', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                        }) : '-'"></dd>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">ID Nasabah</dt>
+                                    <dd class="text-sm text-gray-900 dark:text-gray-200 col-span-2"
+                                        x-text="selectedFee.user?.id"></dd>
                                 </div>
 
                                 <div class="grid grid-cols-3 gap-4 py-3 border-t border-gray-100 dark:border-gray-700">
@@ -129,7 +139,7 @@
                         </button>
                     </form>
 
-                    <button x-show="selectedFee.status === 'unpaid'" type="button" 
+                    <button x-show="selectedFee.status === 'unpaid'" type="button"
                         @click="showDetailModal = false; showRejectModal = true; rejectFormAction = '{{ route('petugas.monthly-fee.reject', '') }}/' + selectedFee.id;"
                         class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2
                         bg-red-500 text-base font-medium text-white hover:bg-red-600

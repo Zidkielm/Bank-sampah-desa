@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('monthly_fees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained('users')->onDelete('restrict');
+            $table->string('user_id', 20);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('receiver_id', 20);
+            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('restrict');
             $table->date('payment_date');
             $table->decimal('amount', 10, 2);
             $table->enum('payment_method', ['cash', 'transfer'])->default('cash');

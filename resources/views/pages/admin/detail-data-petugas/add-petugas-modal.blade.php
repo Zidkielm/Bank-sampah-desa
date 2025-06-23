@@ -63,7 +63,7 @@
                                             class="h-5 w-5 text-gray-400 hover:text-gray-600"></i>
                                     </div>
                                 </div>
-                                <div class="mt-2">
+                                {{-- <div class="mt-2">
                                     <button type="button" onclick="generatePassword()"
                                         class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white
                                         bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2
@@ -71,7 +71,7 @@
                                         <i data-feather="refresh-cw" class="mr-1.5 h-3 w-3"></i>
                                         Generate Password
                                     </button>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="mb-4">

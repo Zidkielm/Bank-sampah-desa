@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -18,11 +19,8 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'name',
         'email',
@@ -34,11 +32,6 @@ class User extends Authenticatable
         'status',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
@@ -46,20 +39,10 @@ class User extends Authenticatable
         'two_factor_secret',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
     protected $appends = [
         'profile_photo_url',
     ];
@@ -104,14 +87,55 @@ class User extends Authenticatable
         return $this->hasMany(MonthlyFee::class, 'receiver_id');
     }
 
-    /**
-     * Boot the model.
-     *
-     * @return void
-     */
+    public static function generateUserId($name)
+    {
+        $words = explode(' ', trim($name));
+        $initials = '';
+        foreach ($words as $word) {
+            if (!empty($word)) {
+                $initials .= strtoupper(substr($word, 0, 1));
+            }
+        }
+
+        $dateFormat = date('dmy');
+
+        $baseId = $initials . $dateFormat;
+
+        return DB::transaction(function () use ($baseId) {
+            $datePattern = substr($baseId, -6);
+            $existingUsers = self::where('id', 'LIKE', '%' . $datePattern . '%')
+                               ->lockForUpdate()
+                               ->get();
+
+            $sequences = [];
+            foreach ($existingUsers as $user) {
+                if (preg_match('/^[A-Z]+' . $datePattern . '(\d{3})$/', $user->id, $matches)) {
+                    $sequences[] = (int) $matches[1];
+                }
+            }
+
+            if (empty($sequences)) {
+                $nextSequence = 1;
+            } else {
+                sort($sequences);
+                $nextSequence = max($sequences) + 1;
+            }
+
+            $sequenceFormatted = str_pad($nextSequence, 3, '0', STR_PAD_LEFT);
+
+            return $baseId . $sequenceFormatted;
+        });
+    }
+
     protected static function boot()
     {
         parent::boot();
+
+        static::creating(function ($user) {
+            if (empty($user->id)) {
+                $user->id = self::generateUserId($user->name);
+            }
+        });
 
         static::deleting(function ($user) {
             $user->deposits()->each(function ($deposit) {

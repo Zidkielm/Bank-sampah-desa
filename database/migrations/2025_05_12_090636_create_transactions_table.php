@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('user_id', 20);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->morphs('transactionable'); // Polymorphic relationship (deposit, withdrawal, or monthly fee)
             $table->decimal('amount', 12, 2);
             $table->enum('type', ['credit', 'debit']); // credit: deposit, debit: withdrawal or monthly fee
