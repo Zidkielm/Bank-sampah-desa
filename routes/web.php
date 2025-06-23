@@ -95,12 +95,12 @@ Route::middleware(['auth:sanctum', 'verified', 'role:petugas'])->group(function 
     Route::post('/petugas/monthly-fee/approve/{id}', [MonthlyFeeController::class, 'approve'])->name('petugas.monthly-fee.approve');
     Route::post('/petugas/monthly-fee/reject/{id}', [MonthlyFeeController::class, 'reject'])->name('petugas.monthly-fee.reject');
 
-    Route::resource('petugas/dashboard/nasabah', PetugasDataNasabahController::class)->names([
-        'store' => 'petugas.nasabah.store',
-        'update' => 'petugas.nasabah.update',
-        'destroy' => 'petugas.nasabah.destroy',
-        'index' => 'petugas.data-nasabah',
-    ])->except(['create', 'show', 'edit']);
+    // Route::resource('petugas/dashboard/nasabah', PetugasDataNasabahController::class)->names([
+    //     'store' => 'petugas.nasabah.store',
+    //     'update' => 'petugas.nasabah.update',
+    //     'destroy' => 'petugas.nasabah.destroy',
+    //     'index' => 'petugas.data-nasabah',
+    // ])->except(['create', 'show', 'edit']);
 });
 
 // role nasabah
